@@ -53,6 +53,10 @@ read_aer_out <- function(file = "aermod.out") {
                      .[grep(df$sources[1], .)] %>% 
                      str_split("[[:space:]]+")
     
+    df$src_x    <- df$src_coords %>% unlist() %>% .[3]
+    
+    df$src_y    <- df$src_coords %>% unlist() %>% .[4]
+    
     df$src_elev <- df$src_coords %>% unlist() %>% .[5]
     
     df$src_coords <- df$src_coords %>% unlist() %>% .[3:4] %>% paste(collapse= " ")
