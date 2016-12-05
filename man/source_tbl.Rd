@@ -9,7 +9,7 @@ source_tbl(id = c("SV01", "SV02"), description = c("boiler1", "boiler2"),
   y_coord = c(4631367, 4811367), type = c("point", "point"),
   emissions = c(1, 1), emis_unit = "g/s", height_m = c(10, 12),
   temp_k = c(600, 610), velocity_ms = c(30, 25), diameter_m = c(2, 2),
-  downwash_file = "", group_ids = "")
+  downwash_file = "", group_id = "")
 }
 \arguments{
 \item{id}{Source ID. For multiple sources use a vector: \code{c("SV01", "SV02")}.}
@@ -36,14 +36,14 @@ For multiple sources use a vector: \code{c("g/s", "lb/hr")}.}
 
 \item{diameter_m}{Source diameter in meters. For multiple sources use a vector: \code{c(1, 1.1)}.}
 
+\item{group_id}{Group ID assigned to source. 
+To assign multiple groups use a vector: \code{c("All", "SV01", "SV01_to_SV03")}.
+If blank, sources are automatically assigned to group "All", 
+which will contain the aggregated AERMOD results for all sources.}
+
 \item{emis_units}{Units of measurement for \code{emissions}.
 Options: (1) "g/s", (2) "lb/hr", or (3) "tons/yr". 
 For multiple sources use a vector: \code{c("g/s", "lb/hr")}.}
-
-\item{group_id}{Group ID that each source is assigned to. 
-For multiple groups use a vector: \code{c("All", "SV01", "SV01_to_SV03")}.
-If blank, sources are automatically assigned to group "All", 
-which will contain the aggregated AERMOD results for all sources.}
 }
 \description{
 Create an input table of AERMOD source options.

@@ -28,12 +28,12 @@ new_aermod <- function(control     = "control",
   assign(control, control_tbl(), pos = 1)
 
   # 2 - SOURCES
-  sources <<- source_tbl()
+  assign(sources, source_tbl())
   
   # 3- METEOROLOGY OPTIONS
-  met <<- met_tbl()
+  assign(meteorology, met_tbl())
 
   # 4 - OUTPUT OPTIONS
-  output <<- out_tbl()
+  assign(output, out_tbl())
   
 }
