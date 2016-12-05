@@ -1,25 +1,28 @@
 #' Output options
 #'
 #' Create an input table of AERMOD output options.
-#' @param RECTABLE Output options as text. Multiple options separated by a comma: 
-#' @keywords output aermod input
+#' @param rect_table Output options as text. Separate multiple outputs with a comma: \code{"ALLAVE 1ST, 1 1ST"} 
+#' @param max_table Output options as text. 
+#' @param day_table Output options as text.   
+#' @param plot_file Output options as text. 
+#' @keywords output aermod 
 #' @export
 #' @examples
-#' out_tbl(RECTABLE = "ALLAVE 1ST, 1 1ST 8TH")
+#' out_tbl(rect_table = "ALLAVE 1ST, 1 1ST 8TH")
 # 
 #
 
-out_tbl <- function(RECTABLE = "ALLAVE 1ST, 1 1ST",
-                    MAXTABLE = "",
-                    DAYTABLE = "",
-                    PLOTFILE = ""
+out_tbl <- function(rect_table = "ALLAVE 1ST, 1 1ST",
+                    max_table  = "",
+                    day_table  = "",
+                    plot_file  = ""
 ) {
 
-df <- tibble::tibble(RECTABLE = RECTABLE, 
-                     MAXTABLE = MAXTABLE,
-                     DAYTABLE = DAYTABLE,
-                     PLOTFILE = PLOTFILE)
-
+df <- tibble::tibble(rect_table = rect_table, 
+                     max_table  = max_table,
+                     day_table  = day_table,
+                     plot_file  = plot_file)
+ 
 return(df)
 
 }

@@ -24,11 +24,11 @@ read_aermod_inp <- function(file = "aermod.inp") {
   
   co <- control_tbl()
   
-  co$titleone <- df[1, 2]
-  co$titletwo <- df[2, 2]
-  co$modelopt <- df[3, 2]
-  co$avertime <- df[4, 2]
-  co$pollutid <- df[5, 2]
+  co$title_one <- df[1, 2]
+  co$title_two <- df[2, 2]
+  co$model_opt <- df[3, 2]
+  co$aver_time <- df[4, 2]
+  co$pollut_id <- df[5, 2]
       
   # SOURCE OPTIONS
   so <- source_tbl()
@@ -97,13 +97,14 @@ read_aermod_inp <- function(file = "aermod.inp") {
   
   me <- met_tbl()
   
-  me$SURFFILE <- df[1, 2]
-  me$PROFFILE <- df[2, 2]
-  me$SURFDATA <- df[3, 2]
-  me$UAIRDATA <- df[4, 2]
-  me$PROFBASE <- df[5, 2]
-  me$STARTEND <- df[6, 2]
-      
+  me$surf_file      <- df[1, 2]
+  me$prof_file      <- df[2, 2]
+  me$surf_site_info <- df[3, 2]
+  me$prof_site_info <- df[4, 2]
+  me$base_elev      <- df[5, 2]
+  me$start_met      <- strsplit(df[6, 2], ", ")[[1]][1]
+  me$end_met        <- strsplit(df[6, 2], ", ")[[1]][2]
+  
   # OUTPUT
   start <- grep("OU STARTING", inp) + 1
   end   <- grep("OU FINISHED", inp) - 1
@@ -115,32 +116,38 @@ read_aermod_inp <- function(file = "aermod.inp") {
   
   ou <- out_tbl()
   
-  ou$RECTABLE <- subset(df, V1 == "   RECTABLE ")[ , 2]
-  ou$MAXTABLE <- subset(df, V1 == "   MAXTABLE ")[ , 2]
-  ou$DAYTABLE <- subset(df, V1 == "   DAYTABLE ")[ , 2]
-  ou$PLOTFILE <- subset(df, V1 == "   PLOTFILE ")[ , 2]
+  ou$rect_table <- subset(df, V1 == "   RECTABLE ")[ , 2]
+  ou$max_table  <- subset(df, V1 == "   MAXTABLE ")[ , 2]
+  ou$day_table  <- subset(df, V1 == "   DAYTABLE ")[ , 2]
+  ou$plot_file  <- subset(df, V1 == "   PLOTFILE ")[ , 2]
       
-  # PROJECT
-  start <- grep("PROJCTN", inp)
-  end   <- grep("ZONEINX", inp)
+  # PROJECTION DETAILS
+  #start <- grep("PROJCTN", inp)
+  #end   <- grep("ZONEINX", inp)
   
-  df <- read.fwf(textConnection(inp[start:end]), 
-                 widths = c(12, max(nchar(inp[start:end])) - 12), 
-                 header = FALSE, 
-                 stringsAsFactors = FALSE)
+  #df <- read.fwf(textConnection(inp[start:end]), 
+  #               widths = c(12, max(nchar(inp[start:end])) - 12), 
+  #               header = FALSE, 
+  #               stringsAsFactors = FALSE)
   
-  po <- project_tbl
+  #po <- project_tbl
   
-  po$PROJCTN  <- df[1, 2]
-  po$DESCPTN  <- df[2, 2]
-  po$DATUM    <- df[3, 2]
-  po$DTMRGN   <- df[4, 2]
-  po$UNITS    <- df[5, 2]
-  po$ZONE     <- df[6, 2]
-  po$ZONEINX  <- df[7, 2]
+  #po$PROJCTN  <- df[1, 2]
+  #po$DESCPTN  <- df[2, 2]
+  #po$DATUM    <- df[3, 2]
+  #po$DTMRGN   <- df[4, 2]
+  #po$UNITS    <- df[5, 2]
+  #po$ZONE     <- df[6, 2]
+  #po$ZONEINX  <- df[7, 2]
       
-  # COMBINE all inputs
-  aermod_inp <- cbind(co, so, re, me, ou, po)
+  # COMBINE input tables
+  aermod_inp <- cbind(co, so, re, me, ou)
+  
+  aermod_inp <- list(control     = co,
+                     sources     = so,
+                     receptors   = re,
+                     meteorology = me,
+                     output      = ou)
       
   return(aermod_inp)
   

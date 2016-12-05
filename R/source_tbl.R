@@ -18,10 +18,9 @@
 #'                    Options: (1) "g/s", (2) "lb/hr", or (3) "tons/yr". 
 #'                    For multiple sources use a vector: \code{c("g/s", "lb/hr")}.
 #' @param diameter_m Source diameter in meters. For multiple sources use a vector: \code{c(1, 1.1)}.                    
-#' @param group_id  Group ID assigned to source. 
-#'                  To assign multiple groups use a vector: \code{c("All", "SV01", "SV01_to_SV03")}.
-#'                  If blank, sources are automatically assigned to group "All", 
-#'                  which will contain the aggregated AERMOD results for all sources.
+#' @param group_id Group IDs assigned to source. 
+#'                 Separate multiple groups with a comma: \code{"All, SV01, SV01_to_SV03"}.
+#'                 If blank, source is assigned to group "All".
 #' @keywords source aermod input
 #' @export
 #' @examples
