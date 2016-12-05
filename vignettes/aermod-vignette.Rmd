@@ -1,0 +1,189 @@
+---
+title: "Method for updating air dispersion factors for screening applications"
+author: "MPCA - Risk evaluation and air modeling, EAO"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Method for updating AERMOD dispersion factors}
+---
+
+
+## Mission
+
+Default dispersion factors used for screening purposes are updated after the release of a new AERMOD version or MET data set. The model versions^[AERMOD version: 15181] and meteorology^[Met years: 2009-2013; sites MSP & DYT] used for the current dispersion factors are shown on the right. The generated dispersion factors are designed to be protective and overestimate dispersion for real-world operating conditions. The conservative assumptions allow the results to be generalized to a wide set of operation scenarios and provide for quick estimates of air concentrations.
+
+# Updates
+
+The table of default dispersion factors was expanded to include the following options.
+
+
+- Downwash efffects
+- Minimum exit velocity
+- Minimum stack temperature
+- Minimum stack diameter
+
+
+_If you have requests or recommendations, please submit them to https://github.com. For general questions, contact [air.modeling@mn.state.us](emailto::air.modeling@mn.state.us)._
+
+# Assumptions
+
+1. __Downwash:__ Worst-case downwash parameters were captured for each scenario by including buildings located 50 meters from the facility in each of the 8 cardinal directions. Three building heights were modeled for each scenario: 50%, 75% and 100% of the stack height.   
+1. __Meteorology:__ Each scenario was modeled with met data from `MSP` and `DUL`. 
+1. __Stack temperature:__ A minimum stack temperature that is as warm as ambient conditions.  
+1. __Exit velocity:__ A minimum exit velocity of 0.2 m/s.
+
+  
+_The screening dispersion factors are not considered protective for facilities with exit temperatures below ambient or for sources with near zero exit velocity._
+
+5. __Receptor grid:__  
+  > 2 meter spacing for receptors up to 50m from the facility  
+  > 5 meter spacing for receptors up to 110m  
+  > 10 meter spacing for receptors up to 200m  
+  
+5. __Flat terrain:__ The model was run with the `flat terrain` option.
+5. __Rural:__ The model was run with the default  `rural` option.
+
+
+# Alernatives
+
+AERSCREEN uses a simple factor method to estimate annual average concentrations - divide the 1-hour maximum by ten. While this method is appropriate for nearby receptors, it results in overly protecive estimates for distances greater than 50 meters.
+
+
+# Input files
+An input file was created for each of the scenario combinations below. `r "672 scenarios were modeled in total."` There was a total of 168 different sources, each modeled using 2 sets of MET data with downwash both and and off.
+
+  - Two met files: Minneapolis (MSP) and Duluth (DYT)   
+  - 44 stack heights: [1 to 37 and 40, 45, 50, 60, 70, 80, 90] meters    
+  - 7 stack diameters: [0.15, 0.3, 0.6, 1, 1.5, 2.5, 3.5] meters    
+  - 6 exit velocities: [0.2, 1, 3, 10, 20, 35] m/s  
+  - 4 exit temperatures: [Ambient, 293, 315, 450] kelvin
+  - 2: Downwash on/off
+ 
+## Load MET data
+```{r eval=F}
+library(aermod)
+
+# MSP
+MSP <- met_tbl()
+MSP$SURFFILE <- "..\\RASSUpdate_Met1\\aq2-115\\MSPMPX5Y_20092013\\MSPMPX5Y.sfc"
+MSP$PROFFILE <- "..\\RASSUpdate_Met1\\aq2-115\\MSPMPX5Y_20092013\\MSPMPX5Y.pfl"
+MSP$SURFDATA <- "14922 2009 MINNEAPOLIS-ST_PAUL/INTL_ARP"
+MSP$UAIRDATA <- "94983 2009"
+MSP$PROFBASE <- "256.11 METERS"
+MSP$STARTEND <- ""
+
+MSP <- list(MSP = MSP)
+                
+# DULUTH
+DUL <- met_tbl()
+DUL$SURFFILE <- "..\\RASSUpdate_Met2\\aq2-104\\DYTINL5Y_20092013\\DYTINL5Y.sfc"
+DUL$PROFFILE <- "..\\RASSUpdate_Met2\\aq2-104\\DYTINL5Y_20092013\\DYTINL5Y.pfl"
+DUL$SURFDATA <- "4919 2009 Duluth_Sky_ARP"
+DUL$UAIRDATA <- "14918 2009 INTERNATIONAL_FALLS/INTL_ARP"
+DUL$PROFBASE <- "256.11 METERS"
+DUL$STARTEND <- ""
+
+DUL <- list(Duluth = DUL)
+
+```
+
+
+## Set input parameters
+```{r eval=F}
+
+sk_heights <- c(1:37, 40, 45, 50, 60, 70, 80, 90)
+  
+sk_diameters <- c(0.15, 0.3, 0.6, 1, 1.5, 2.5, 3.5) 
+  
+sk_velocity <- c(0.2, 1, 3, 10, 20, 35) 
+
+tempsK <- c(0, 293, 315, 450)
+
+tempsF <- list("Ambient", 68, 107, 350)
+  
+n_scenarios <- 2 * nrow(sk_diameters) * nrow(sk_velocity) * nrow(tempsK) 
+  
+```
+
+## Run AERMOD for each scenario
+```{r eval=F}
+
+for(met_file in list(MSP, DUL)) {
+
+for(height in sk_heights) {
+
+for(diam in sk_diameters) {
+
+for(velocity in sk_velocity) {
+
+for(tempK in tempsK) {
+
+# CONTROL OPTIONS
+co <- control_tbl()
+co$TITLEONE <- paste(height, "Meter stacks")
+co$TITLETWO <- paste0("Met Data: ", names(met_file))
+co$MODELOPT <- paste("CONC", "FLAT")
+co$AVERTIME <- paste("1", "ANNUAL")
+
+# SOURCE OPTIONS
+so <- source_tbl()
+so$ELEV     <- strsplit(met_file$PROFBASE, " ")[[1]][1]
+so$XCOORD   <- 407502.89
+so$YCOORD   <- 5133986.24
+so$TYPE     <- "POINT"
+so$ID       <- paste(height, grep(diam, sk_diameters), grep(velocity, sk_velocity), grep(tempK, tempsK), sep="_")
+so$DESCRSRC <- ""
+so$EMISS    <- 1
+so$HEIGHT   <- height
+so$TEMPK    <- tempK
+so$VELOCITY <- velocity
+so$DIAMETER <- diam
+so$DOWNFILE <- ""
+so$GROUPID  <- so$ID
+so$GROUPSRC <- so$ID    
+
+
+# RECEPTORS  
+re <- receptor_tbl()
+re$RECTFILE <- "..\\Receptors\\circleReceptors.ROU"
+    
+# METEOROLOGY
+me <- metFile[[1]]
+
+# OUTPUT
+ou <- out_tbl()
+ou$RECTABLE <- "ALLAVE 1ST, 1 1ST"
+    
+# PROJECT
+po <- proj_tbl()
+    
+# Create master input table
+aermod_inp <- cbind(co, po, me)
+    
+
+# SAVE INPUT FILE
+writeLines(cat(aermod_inp), "aermod.inp")
+
+    
+# RUN AERMOD
+
+
+}}}}}
+
+```
+
+ 
+# Results
+
+The tables and charts below compare the previous screening dispersion factors to the updated results. 
+
+```{r eval=F}
+knitr::kable(
+  mtcars[1:6, 1:6], caption = 'A subset of mtcars.'
+)
+```
+
+
+`r 'In his later books'`
+
