@@ -9,7 +9,6 @@
 # 
 #
 
-
 read_aermod_inp <- function(file = "aermod.inp") {
   
   inp <- readLines(file)
@@ -18,23 +17,23 @@ read_aermod_inp <- function(file = "aermod.inp") {
   start <- grep("CO STARTING", inp) + 1
   end   <- grep("CO FINISHED", inp) - 1 
   
-  df <- read.fwf(textConnection(inp[start:end]), 
-                 widths = c(12, nchar(inp[start]) - 12), 
-                 header = FALSE, 
-                 stringsAsFactors = FALSE)
+  df <- utils::read.fwf(textConnection(inp[start:end]), 
+                        widths = c(12, nchar(inp[start]) - 12), 
+                        header = FALSE, 
+                        stringsAsFactors = FALSE)
   
   co <- control_tbl()
   
-  co$TITLEONE <- df[1, 2]
-  co$TITLETWO <- df[2, 2]
-  co$MODELOPT <- df[3, 2]
-  co$AVERTIME <- df[4, 2]
-  co$POLLUTID <- df[5, 2]
+  co$titleone <- df[1, 2]
+  co$titletwo <- df[2, 2]
+  co$modelopt <- df[3, 2]
+  co$avertime <- df[4, 2]
+  co$pollutid <- df[5, 2]
       
   # SOURCE OPTIONS
   so <- source_tbl()
   
-  # SOURCE locations
+  ## SOURCE locations
   start <- grep("LOCATION", inp)[1]
   end   <- max(grep("LOCATION", inp))
   
@@ -42,13 +41,13 @@ read_aermod_inp <- function(file = "aermod.inp") {
   
   df <- read.csv(textConnection(df), header = FALSE, stringsAsFactors = FALSE)
 
-  so$ID       <- df[ , 3]
-  so$TYPE     <- df[ , 4]
-  so$XCOORD   <- df[ , 5]
-  so$YCOORD   <- df[ , 6]
-  so$ELEV     <- df[ , 7]
+  so$id        <- df[ , 3]
+  so$type      <- df[ , 4]
+  so$x_coord   <- df[ , 5]
+  so$y_coord   <- df[ , 6]
+  so$elevation <- df[ , 7]
   
-  so$DESCRSRC <- ""
+  so$description <- ""
   
   # SOURCE parameters
   start <- grep("SRCPARAM", inp)[1]
@@ -56,28 +55,28 @@ read_aermod_inp <- function(file = "aermod.inp") {
   
   df <- gsub("[[:space:]]+", ",", inp[start:end])
   
-  df <- read.csv(textConnection(df), header = FALSE, stringsAsFactors = FALSE)
+  df <- utils::read.csv(textConnection(df), header = FALSE, stringsAsFactors = FALSE)
   
-  so$EMISS    <- df[ , 4]
-  so$HEIGHT   <- df[ , 5]
-  so$TEMPK    <- df[ , 6]
-  so$VELOCITY <- df[ , 7]
-  so$DIAMETER <- df[ , 8]
+  so$emissions   <- df[ , 4]
+  so$height_m    <- df[ , 5]
+  so$temp_k      <- df[ , 6]
+  so$velocity_ms <- df[ , 7]
+  so$diameter_k  <- df[ , 8]
   
   # SOURCE downwash
-  so$DOWNFILE <- ""
+  so$downwash_file <- ""
   
   # SOURCE groups
   start <- grep("SRCGROUP", inp)[1]
   end   <- max(grep("SRCGROUP", inp))
   
-  df <- read.fwf(textConnection(inp[start:end]), 
-                 widths = c(12, 8, nchar(inp[start])-20), 
-                 header = FALSE, 
-                 stringsAsFactors = FALSE)
+  df <- utils::read.fwf(textConnection(inp[start:end]), 
+                        widths = c(12, 8, nchar(inp[start])-20), 
+                        header = FALSE, 
+                        stringsAsFactors = FALSE)
   
-  so$GROUPID  <- df[ , 2]
-  so$GROUPSRC <- df[ , 3]
+  so$group_ids     <- df[ , 2]
+  so$group_sources <- df[ , 3]
       
   # RECEPTORS
   start <- grep("RE STARTING", inp)[1] + 1
@@ -85,18 +84,18 @@ read_aermod_inp <- function(file = "aermod.inp") {
   
   re <- receptor_tbl()
   
-  re$RECTFILE <- strsplit(inp[start:end][grep("INCLUDED", inp[start:end])], "INCLUDED ")[[1]][2]
+  re$rect_file <- strsplit(inp[start:end][grep("INCLUDED", inp[start:end])], "INCLUDED ")[[1]][2]
       
   # METEOROLOGY
   start <- grep("ME STARTING", inp) + 1
   end   <- grep("ME FINISHED", inp) - 1 
   
-  df <- read.fwf(textConnection(inp[start:end]), 
-                 widths = c(12, max(nchar(inp[start:end])) - 12), 
-                 header = FALSE, 
-                 stringsAsFactors = FALSE)
+  df <- utils::read.fwf(textConnection(inp[start:end]), 
+                        widths = c(12, max(nchar(inp[start:end])) - 12), 
+                        header = FALSE, 
+                        stringsAsFactors = FALSE)
   
-  me <- new("MeteorologyOptions")
+  me <- met_tbl()
   
   me$SURFFILE <- df[1, 2]
   me$PROFFILE <- df[2, 2]
