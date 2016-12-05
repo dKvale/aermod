@@ -1,11 +1,11 @@
 ---
-title: "Method for updating air dispersion factors for screening applications"
+title: "Method for updating air screening dispersion factors"
 author: "MPCA - Risk evaluation and air modeling, EAO"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Method for updating AERMOD dispersion factors}
+  %\VignetteIndexEntry{Method for updating air screening dispersion factors}
 ---
 
 
