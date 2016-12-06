@@ -1,4 +1,4 @@
-d#' Projection details
+#' Projection details
 #'
 #' Create a data frame of projection details for AERMOD receptors.
 #' @param projection Coordinate projection of receptors.

@@ -4,25 +4,45 @@
 \alias{control_tbl}
 \title{Control options}
 \usage{
-control_tbl(TITLEONE = "Demo Energy Station", TITLETWO = "AERMOD Run",
-  MODELOPT = "DFAULT, CONC", AVERTIME = "1, 24, ANNUAL", URBANOPT = "",
-  POLLUTID = "OTHER", HALFLIFE = "", DCAYCOEF = "", FLAGPOLE = "",
-  EVENTFIL = "", SAVEFILE = "", INITFILE = "", MULTYEAR = "",
-  DEBUGOPT = "", ERRORFIL = "", RUNORNOT = TRUE)
+control_tbl(title_one = "Demo Energy Station",
+  title_two = "Default Run: Hour, Day, Annual", model_opt = "DFAULT, CONC",
+  avg_time = "1, 24, ANNUAL", urban_opt = "", pollutant_id = "OTHER",
+  flagpole = "", event_file = "", error_file = "", multi_year = "",
+  debug_opt = "")
 }
 \arguments{
-\item{TITLEONE}{Title of AERMOD run.}
+\item{title_one}{Title.}
 
-\item{MODELOPT}{AERMOD run options. Separate multiple options by comma.}
+\item{title_two}{Subtitle.}
+
+\item{model_opt}{Model run options. 
+Separate multiple options with a comma: \code{"DFAULT, CONC"}. 
+For a complete list of options, see 'MODELOPT' in the AERMOD reference guide at 
+https://www3.epa.gov/ttn/scram/models/aermod/aermod_quick-reference-guide.pdf.}
+
+\item{avg_time}{Dispersion factor averaging times. Separate multiple options with a comma: \code{"1, 24, ANNUAL"}.}
+
+\item{urban_opt}{Urban options for AERMOD run. Separate multiple options with a comma: \code{"500000 Minneapolis"}.}
+
+\item{pollutant_id}{Pollutant ID. Options: (1) "NO2" (2)...}
+
+\item{flagpole}{Flagpole options.}
+
+\item{event_file}{File to write AERMOD 'events' to.}
+
+\item{error_file}{File to write AERMOD errors to.}
+
+\item{multi_year}{Optoons for performing multiple "year" AERMOD runs. 
+Used for identifying the highest annual value across multiple years of met data.}
+
+\item{debug_opt}{Automatic debugging options performed by AERMOD.}
 }
 \description{
 Create an input table of AERMOD control options.
 }
 \examples{
-control_tbl(TITLEONE = "Demo Energy Station")
+control_tbl(title_one = "Demo Energy Station")
 
-TITLEONE            TITLETWO   MODELOPT     AVERTIME      URBANOPT POLLUTID HALFLIFE DCAYCOEF FLAGPOLE EVENTFIL SAVEFILE INITFILE MULTYEAR DEBUGOPT ERRORFIL RUNORNOT
-Demo Energy Station AERMOD Run DFAULT, CONC 1, 24, ANNUAL          OTHER                                                                                     TRUE 
 }
 \keyword{aermod}
 \keyword{control}

@@ -35,7 +35,7 @@ source_tbl <- function(id            = c("SV01", "SV02"),
                        y_coord       = c(4631367, 4811367),
                        type          = c("point", "point"),
                        emissions     = c(1, 1),
-                       emis_unit     = "g/s",
+                       emis_units     = "g/s",
                        height_m      = c(10, 12),
                        temp_k        = c(600, 610),
                        velocity_ms   = c(30, 25),
@@ -50,13 +50,13 @@ source_tbl <- function(id            = c("SV01", "SV02"),
                        y_coord       = y_coord,
                        type          = type,
                        emissions     = emissions,
-                       emis_unit     = "g/s",
+                       emis_units    = emis_units,
                        height_m      = height_m,
                        temp_k        = temp_k,
                        velocity_ms   = velocity_ms,
                        diameter_m    = diameter_m,
                        downwash_file = downwash_file,
-                       group_id      = ifelse(nchar(group_ids) < 1, "ALL", group_id))
+                       group_id      = ifelse(nchar(group_id) < 1, "ALL", group_id))
   return(df)
  
 }

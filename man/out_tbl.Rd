@@ -4,19 +4,24 @@
 \alias{out_tbl}
 \title{Output options}
 \usage{
-out_tbl(RECTABLE = "ALLAVE 1ST, 1 1ST", MAXTABLE = "", DAYTABLE = "",
-  PLOTFILE = "")
+out_tbl(rect_table = "ALLAVE 1ST, 1 1ST", max_table = "", day_table = "",
+  plot_file = "")
 }
 \arguments{
-\item{RECTABLE}{Output options as text. Multiple options separated by a comma:}
+\item{rect_table}{Output options as text. Separate multiple outputs with a comma: \code{"ALLAVE 1ST, 1 1ST"}}
+
+\item{max_table}{Output options as text.}
+
+\item{day_table}{Output options as text.}
+
+\item{plot_file}{Output options as text.}
 }
 \description{
 Create an input table of AERMOD output options.
 }
 \examples{
-out_tbl(RECTABLE = "ALLAVE 1ST, 1 1ST 8TH")
+out_tbl(rect_table = "ALLAVE 1ST, 1 1ST 8TH")
 }
 \keyword{aermod}
-\keyword{input}
 \keyword{output}
 

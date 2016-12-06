@@ -11,8 +11,8 @@
 #' @param urban_opt Urban options for AERMOD run. Separate multiple options with a comma: \code{"500000 Minneapolis"}. 
 #' @param pollutant_id Pollutant ID. Options: (1) "NO2" (2)... 
 #' @param flagpole Flagpole options.
-#' @param event_file File to write AERMOD 'events' to. Default is "EVENT.TMP".
-#' @param error_file File to write AERMOD errors to. Default is "ERRMSG.TMP".
+#' @param event_file File to write AERMOD 'events' to.
+#' @param error_file File to write AERMOD errors to.
 #' @param multi_year Options for performing multiple "year" AERMOD runs. 
 #'                   Used for identifying the highest annual value across multiple years of met data.
 #' @param debug_opt Automatic debugging options performed by AERMOD.
@@ -34,7 +34,7 @@ control_tbl <- function(title_one     = "Demo Energy Station",
                         error_file    = "",
                         multi_year    = "",
                         debug_opt     = ""
-                        ) {
+) {
  
   df <- tibble::tibble(title_one     = title_one, 
                        title_two     = title_two,
@@ -51,7 +51,5 @@ control_tbl <- function(title_one     = "Demo Energy Station",
   
   return(df)
 }
-
-##
 
 

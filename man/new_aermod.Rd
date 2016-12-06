@@ -4,7 +4,7 @@
 \alias{new_aermod}
 \title{Create AERMOD input tables}
 \usage{
-new_aermod(control = "control", sources = "sources", meteorology = "met",
+new_aermod(control = "control", sources = "sources", met = "met",
   output = "out")
 }
 \arguments{
@@ -12,16 +12,16 @@ new_aermod(control = "control", sources = "sources", meteorology = "met",
 
 \item{sources}{Name for emission source data frame. Default is "sources".}
 
-\item{meteorology}{Name for meteorology options data frame. Default is "met".}
+\item{met}{Name for meteorology options data frame. Default is "met".}
 
 \item{output}{Name for output options data frame. Default is "output".}
 }
 \description{
 Create default AERMOD input data frames: 
-(1) control 
-(2) sources
-(3) meteorology
-(4) output_options
+(1) Control options 
+(2) Source parameters
+(3) Meteorology data
+(4) Output options
 }
 \examples{
 

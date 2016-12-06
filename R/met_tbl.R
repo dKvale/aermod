@@ -5,7 +5,7 @@
 #' @param surf_site_info Optional surface met site description: \code{"Station_no Year City/Name"}.
 #' @param prof_file Profile met data file location.
 #' @param prof_site_info Optional profile met site description: \code{"Station_no Year City/Name"}.
-#' @param base_elev_m Base elevation above mean sea level of met site in meters.
+#' @param base_elev Base elevation above mean sea level of met site in meters.
 #' @param start_met Start date of meteorology data to model. Enter as text: \code{"start_year start_month start_day start_hour"}
 #' @param end_met End date of meteorology data to model. Enter as text : \code{"end_year end_month end_day end_hour"}
 #' @keywords meteorology weather surface aermod input
