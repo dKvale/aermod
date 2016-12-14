@@ -34,14 +34,14 @@
 #
 
 
-new_aermod <- function(as_one_df     = TRUE,
-                       add_to_envir  = FALSE,
-                       input_table   = "aermod_inp",
+new_aermod <- function(input_table   = "aermod_inp",
+                       as_one_df     = TRUE,
                        control       = "control",
                        sources       = "sources",
                        receptors     = "receptors",
                        met           = "met",
-                       out           = "out") {
+                       out           = "out",
+                       add_to_envir  = FALSE) {
   
   if(as_one_df) {
   

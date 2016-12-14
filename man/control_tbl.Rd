@@ -4,16 +4,16 @@
 \alias{control_tbl}
 \title{Control options}
 \usage{
-control_tbl(title_one = "Demo Energy Station",
-  title_two = "Default Run: Hour, Day, Annual", model_opt = "DFAULT, CONC",
+control_tbl(title = "Demo Energy Station",
+  subtitle = "Default Run: Hour, Day, Annual", model_opt = "DFAULT, CONC",
   avg_time = "1, 24, ANNUAL", urban_opt = "", pollutant_id = "OTHER",
   flagpole = "", event_file = "", error_file = "", multi_year = "",
   debug_opt = "")
 }
 \arguments{
-\item{title_one}{Title.}
+\item{title}{Title of modeling run. `TITLEONE` of AERMOD input file.}
 
-\item{title_two}{Subtitle.}
+\item{subtitle}{Subtitle of modeling run. `TITLETWO` of AERMOD input file.}
 
 \item{model_opt}{Model run options. 
 Separate multiple options with a comma: \code{"DFAULT, CONC"}. 
@@ -41,7 +41,7 @@ Used for identifying the highest annual value across multiple years of met data.
 Create an input table of AERMOD control options.
 }
 \examples{
-control_tbl(title_one = "Demo Energy Station")
+control_tbl(title = "Demo Energy Station")
 
 }
 \keyword{aermod}

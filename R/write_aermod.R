@@ -3,6 +3,11 @@
 #' Output an AERMOD input file from a data frame of AERMOD parameters.
 #' @param data Data frame of AERMOD modeling parameters.
 #' @param path Path to write to. Default is "aermod.inp".
+#' @param control Data frame of control parameters. If blank, control parameters from \code{data} are used. 
+#' @param sources Data frame of source parameters. If blank, source parameters from \code{data} are used.
+#' @param receptors Data frame of receptor parameters. If blank, receptor parameters from \code{data} are used.
+#' @param met Data frame of meteorology parameters. If blank, meteorology parameters from \code{data} are used. 
+#' @param out Data frame of output parameters. If blank, output parameters from \code{data} are used. 
 #' @keywords aermod write save input
 #' @export
 #' @examples
@@ -12,76 +17,172 @@
 # 
 # 
 
-write_aermod <- function(data, 
-                         path  = "aermod.inp"
+write_aermod <- function(data      = data.frame(), 
+                         path      = "aermod.inp",
+                         control   = data.frame(),
+                         sources   = data.frame() ,
+                         receptors = data.frame(),
+                         met       = data.frame(),
+                         out       = data.frame()
 ) {
+
+# Data tests    
+if(nrow(data) < 1 & nrow(sources) < 1) return("Data frame is empty. AERMOD requires at least 1 emission source")
+
   
-  if(nrow(data) < 1) return("Data frame is empty. AERMOD requires at least 1 emission source")
+# Create temp tables
+if(is.null(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control}
+
+if(is.null(sources) || nrow(sources) < 1) {so <- data} else {so <- sources}
+
+if(is.null(receptors) || nrow(receptors) < 1) {re <- data[1, ]} else {re <- receptors}
+
+if(is.null(met) || nrow(met) < 1) {me <- data[1, ]} else {me <- met}
+
+if(is.null(out) || nrow(out) < 1) {ou <- data[1, ]} else {ou <- out}
   
-  inp    <- paste0("'", prj_title, "'")     # Title
   
-  inp[2] <- paste0("'", output_type, "'")   # Output type
+# Create text file
+comment_line <- "****************************************\n**"
+
+indent       <- "   "
   
-  inp[3] <- paste0("'METERS' 1.00")         # Distance units
-  
-  inp[4] <- paste0("'UTMN' 0.00")           # Coordinate orientation
-  
-  inp[5] <- length(unique(data$building))           # Number of buildings
-  
-  coord_msg <- TRUE                         # Prevent repeat messages
-  
-  for(i in 1:nrow(data)) {                     # Building names and tier coordinates
+
+## Control pathway ##
+section <- "CO"
+
+section_head <- "Control pathway"
     
-    inp[length(inp) +1] <- paste0(" '",  substring(data[i, "building"], 1, 8), "' ", data[i, "n_tiers"], " ",data[i, "elev"])
-    
-    if(is.null(data[i, "bld_xcoords"]) | 
-       is.null(data[i, "bld_ycoords"]) | 
-       length(unlist(data[i, "bld_xcoords"], ",")) < 3 |
-       length(unlist(data[i, "bld_ycoords"], ",")) < 3 ) {
-      
-      if(coord_msg) {
-        print("Building vertices were calculated for a rectangle. To create a custom building shape, provide 3 or more x,y coordinates.")
-        
-        coord_msg <- FALSE
-      }
-      
-      coords <- bld_coords(source_xy           = data[i, ]$source_xy[[1]],
-                           dist_from_source    = data[i, ]$dist_from_source,
-                           angle_from_source   = data[i, ]$angle_from_source,
-                           width_x             = data[i, ]$width_x,
-                           length_y            = data[i, ]$length_y,
-                           bld_rotation        = data[i, ]$bld_rotation,
-                           angle_units         = data[i, ]$angle_units,
-                           show_plot           = FALSE)
-      
-    } else {
-      
-      coords <- data.frame(x_coords = unlist(data[i, "bld_xcoords"]),
-                           y_coords = unlist(data[i, "bld_ycoords"]))
-    }
-    
-    
-    inp[length(inp) +1] <- paste("   ", length(coords$x_coords) , data[i, "height"])
-    
-    for(n in 1:nrow(coords)) {
-      inp[length(inp) +1] <- paste("     ", coords[n, "x_coords"], coords[n, "y_coords"])
-    }
-    
-  }
+inp_text <- paste0(comment_line, " ", section_head, "\n", comment_line, "\n")
+
+inp_text <- paste0(inp_text, section, " STARTING \n")
+
+inp_text <- paste0(inp_text, "   TITLEONE ", co$title, "\n")
+
+if(nchar(co$subtitle) > 0) {
+  inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
+}
+
+inp_text <- paste0(inp_text, "   MODELOPT ", paste(co$model_opt, collapse = " "), "\n")
+inp_text <- paste0(inp_text, "   AVERTIME ", paste(co$avg_time, collapse = " "), "\n")
+
+if(!is.na(co$urban_opt) & nchar(co$urban_opt) > 0) {
+  inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt, collapse = " "), "\n")
+}
+
+inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
+
+#if(!is.na(co$half_life) &  nchar(as.character(co$half_life)) > 0)  {
+#  inp_text <- paste0(inp_text, "   HALFLIFE ", co$half_life, "\n")
+#}
+
+#if(!is.na(co$decay_coef) & nchar(as.character(co$decay_coef)) > 0) {
+#  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
+#} 
+
+if(!is.na(co$flagpole) & nchar(as.character(co$flagpole))> 0) {
+  inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
+}
+
+inp_text <- paste0(inp_text, "   RUNORNOT RUN\n")
   
-  inp[length(inp) +1] <- 1       # Number of stacks
+inp_text <- paste0(inp_text, section, " FINISHED \n")
+ 
+
+## Source pathway ##
+section <- "SO"
+
+section_head <- "Source pathway"
+
+inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
+
+inp_text <- paste0(inp_text, section, " STARTING \n")
+
+op <- paste0(op, "** Source Locations **\n")
+op <- paste0(op, "**          SourceID     Type       X Coord     Y Coord          Elevat **\n")
+op <- paste0(op, paste0("   LOCATION ",        
+                        fw(object@ID, width = 13),
+                        fw(object@TYPE, width = 11),
+                        fw(object@XCOORD, width = 12),
+                        fw(object@YCOORD, width = 17),
+                        object@ELEV, "\n",
+                        "** DESCRSRC ", object@DESCRSRC, "\n", 
+                        collapse=""))
+
+op <- paste0(op, "\n** Source Parameters **\n")
+op <- paste0(op, "**          SourceID     g/s  (ht,m)   (temp,K) (vel,m/s) (diam,m) **\n")
+op <- paste0(op, paste0("   SRCPARAM ", 
+                        fw(object@ID, width = 13),
+                        fw(object@EMISS, width = 5),
+                        fw(object@HEIGHT, width = 9),
+                        fw(object@TEMPK, width = 9),
+                        fw(object@VELOCITY, width = 10),
+                        object@DIAMETER, "\n",
+                        collapse=""))
+
+op <- paste0(op, "\n** Building Downwash **\n",
+             "** The building downwash file is attached by the INCLUDED statement\n")
+op <- paste0(op, "   INCLUDED ", object@DOWNFILE, "\n")
+
+op <- paste0(op, "\n** Source Groups Defined\n")
+op <- paste0(op, paste0("   SRCGROUP ", 
+                        fw(object@GROUPID, width = 5),
+                        ifelse(object@GROUPID == "ALL", "", object@GROUPSRC),"\n", 
+                        collapse=""))
+
+inp_text <- paste0(inp_text, section, " FINISHED \n")
+
+
+## Receptor pathway ##
+section <- "RE"
+
+section_head <- "Receptor pathway"
+
+inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
+
+inp_text <- paste0(inp_text, section, " STARTING \n")
+
+
+
+inp_text <- paste0(inp_text, section, " FINISHED \n")
+
+
+## Meteorology Pathway ##
+section <- "ME"
+
+section_head <- "Meteorology Pathway"
+
+inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
+
+inp_text <- paste0(inp_text, section, " STARTING \n")
+
+
+
+inp_text <- paste0(inp_text, section, " FINISHED \n")
+
+
+## Output Pathway ##
+section <- "OU"
+
+section_head <- "Output Pathway"
+
+out <- paste0(out, comment_line, " ", section_head, "\n", comment_line, "\n")
+
+out <- paste0(out, section, " STARTING \n")
+
+
+
+out <- paste0(out, section, " FINISHED \n")
+
+
+
+# Return results
+cat("\nGenerated input file: \n\n")
+invisible(writeLines(inp))
   
-  inp[length(inp) +1] <- paste0("  '", substring(data[1, "source_name"], 1, 8), "' ", 
-                                data[1, "source_elev"], " ", 
-                                data[1, "source_height"], " ",
-                                paste(unlist(data[1, ]$source_xy), collapse=" "))
-  
-  cat("\nGenerated input file: \n\n")
-  invisible(writeLines(inp))
-  
-  if(is.null(path) | nchar(path) < 1) {
-    return(inp)
-  } else  writeLines(inp, path)
+if(is.null(path) | nchar(path) < 1) {
+  return(inp)
+} else  writeLines(inp, path)
   
 }
 

@@ -1,8 +1,8 @@
 #' Control options
 #'
 #' Create an input table of AERMOD control options.
-#' @param title_one Title.
-#' @param title_two Subtitle.
+#' @param title Title of modeling run. `TITLEONE` of AERMOD input file.
+#' @param subtitle Subtitle of modeling run. `TITLETWO` of AERMOD input file.
 #' @param model_opt Model run options. 
 #'                  Separate multiple options with a comma: \code{"DFAULT, CONC"}. 
 #'                  For a complete list of options, see 'MODELOPT' in the AERMOD reference guide at 
@@ -19,12 +19,12 @@
 #' @keywords control options aermod input
 #' @export
 #' @examples
-#' control_tbl(title_one = "Demo Energy Station")
+#' control_tbl(title = "Demo Energy Station")
 #'
 #
 
-control_tbl <- function(title_one     = "Demo Energy Station",
-                        title_two     = "Default Run: Hour, Day, Annual",
+control_tbl <- function(title         = "Demo Energy Station",
+                        subtitle      = "Default Run: Hour, Day, Annual",
                         model_opt     = "DFAULT, CONC",
                         avg_time      = "1, 24, ANNUAL",
                         urban_opt     = "",
@@ -36,8 +36,8 @@ control_tbl <- function(title_one     = "Demo Energy Station",
                         debug_opt     = ""
 ) {
  
-  df <- tibble::tibble(title_one     = title_one, 
-                       title_two     = title_two,
+  df <- tibble::tibble(title         = title, 
+                       subtitle      = subtitle,
                        model_opt     = model_opt,
                        avg_time      = avg_time,
                        urban_opt     = urban_opt, 

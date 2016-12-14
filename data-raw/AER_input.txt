@@ -1,8 +1,6 @@
 ****************************************
 ** AERMOD Control Pathway
 ****************************************
-**
-**
 CO STARTING
    TITLEONE Energy Station
    TITLETWO Generate Unit Dispersion Factors
@@ -11,12 +9,9 @@ CO STARTING
    POLLUTID OTHER
    RUNORNOT RUN
 CO FINISHED
-**
 ****************************************
 ** AERMOD Source Pathway
 ****************************************
-**
-**
 SO STARTING
 ** Source Location **
 ** Source ID - Type - X Coord. - Y Coord. **

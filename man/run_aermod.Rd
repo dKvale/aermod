@@ -4,13 +4,13 @@
 \alias{run_aermod}
 \title{Run AERMOD}
 \usage{
-run_aermod(input = "aermod.inp", output = input$title_one,
+run_aermod(input = "aermod.inp", output = input$title,
   exe_folder = "aermod")
 }
 \arguments{
 \item{input}{Path to input file.}
 
-\item{output}{Filename for model results. Defaults to `title_one` of input file.}
+\item{output}{Filename for model results. Defaults to `title` of input file.}
 
 \item{exe_folder}{Folder containing aermod.exe.}
 }

@@ -4,11 +4,13 @@
 \alias{new_aermod}
 \title{Create AERMOD input tables}
 \usage{
-new_aermod(as_one_df = TRUE, add_to_envir = FALSE,
-  input_table = "aermod_inp", control = "control", sources = "sources",
-  receptors = "receptors", met = "met", out = "out")
+new_aermod(input_table = "aermod_inp", as_one_df = TRUE,
+  control = "control", sources = "sources", receptors = "receptors",
+  met = "met", out = "out", add_to_envir = FALSE)
 }
 \arguments{
+\item{input_table}{Name for the joined input data frame added to Global Environment. Default is "aermod_inp". Ignored if \code{as_one_df} is \code{FALSE}.}
+
 \item{as_one_df}{\code{TRUE} or \code{FALSE}. 
 Return all inputs in a single wide data frame. 
 If \code{FALSE}, 5 data frames are returned in a list: 
@@ -17,11 +19,6 @@ If \code{FALSE}, 5 data frames are returned in a list:
      (3) receptors
      (4) meteorology
      (5) output}
-
-\item{add_to_envir}{\code{TRUE} or \code{FALSE}. 
-Exports tables directly to the Global Environment.}
-
-\item{input_table}{Name for the joined input data frame added to Global Environment. Default is "aermod_inp". Ignored if \code{as_one_df} is \code{FALSE}.}
 
 \item{control}{Name for control options data frame added to Global Environment. Default is "control". Ignored if \code{as_one_df} is \code{TRUE}.}
 
@@ -32,6 +29,9 @@ Exports tables directly to the Global Environment.}
 \item{met}{Name for meteorology options data frame added to Global Environment. Default is "met". Ignored if \code{as_one_df} is \code{TRUE}.}
 
 \item{out}{Name for output options data frame added to Global Environment. Default is "output". Ignored if \code{as_one_df} is \code{TRUE}.}
+
+\item{add_to_envir}{\code{TRUE} or \code{FALSE}. 
+Exports tables directly to the Global Environment.}
 }
 \description{
 Create default AERMOD input data frames: 
