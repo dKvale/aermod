@@ -32,7 +32,7 @@ https://www3.epa.gov/ttn/scram/models/aermod/aermod_quick-reference-guide.pdf.}
 
 \item{error_file}{File to write AERMOD errors to.}
 
-\item{multi_year}{Optoons for performing multiple "year" AERMOD runs. 
+\item{multi_year}{Options for performing multiple "year" AERMOD runs. 
 Used for identifying the highest annual value across multiple years of met data.}
 
 \item{debug_opt}{Automatic debugging options performed by AERMOD.}

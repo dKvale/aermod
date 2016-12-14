@@ -4,10 +4,10 @@
 \alias{met_tbl}
 \title{Meteorology options}
 \usage{
-met_tbl(surf_file = "..\\\\MET\\\\RSTMPX5Y.SFC",
+met_tbl(surf_file = "RSTMPx5Y.SFC",
   surf_site_info = "14925 2006 ROCHESTER/MUNICIPAL_ARPT",
-  prof_file = "..\\\\MET\\\\RSTMPX5Y.PFL", prof_site_info = "94983 2006",
-  base_elev = 396, start_met = "2009 1 1 1", end_met = "2013 12 31 24")
+  prof_file = "RSTMPx5Y.PFL", prof_site_info = "94983 2006",
+  base_elev_m = 396, start_met = "2009 1 1 1", end_met = "2013 12 31 24")
 }
 \arguments{
 \item{surf_file}{Surface met data file location.}
@@ -18,11 +18,15 @@ met_tbl(surf_file = "..\\\\MET\\\\RSTMPX5Y.SFC",
 
 \item{prof_site_info}{Optional profile met site description: \code{"Station_no Year City/Name"}.}
 
-\item{start_met}{Start date of meteorology data to model. Enter as text: \code{"start_year start_month start_day start_hour"}}
+\item{base_elev_m}{Base elevation in meters above mean sea level of temperature profile data.}
 
-\item{end_met}{End date of meteorology data to model. Enter as text : \code{"end_year end_month end_day end_hour"}}
+\item{start_met}{Start date of meteorology data to be modeled. 
+Enter as text: \code{"year month day hour"}
+If blank, set to first entry of \code{surf_file}.}
 
-\item{base_elev_m}{Base elevation above mean sea level of met site in meters.}
+\item{end_met}{End date of meteorology data to be modeled. 
+Enter as text : \code{"year month day hour"}
+If blank, set to last entry of \code{surf_file}.}
 }
 \description{
 Create an input table of AERMOD meteorology options.

@@ -7,12 +7,12 @@
 proj_tbl(projection = "Coordinate System UTM",
   description = "UTM: Universal Transverse Mercator",
   datum = "North American datum 1983", dtmrgn = "conus", units = "m",
-  zone = "15", zoneinx = "0")
+  zone = "15", zone_inx = "0")
 }
 \arguments{
-\item{projection}{Coordinate projection of receptors.}
+\item{projection}{Name of coordinate projection used for receptors.}
 
-\item{description}{Coordinate projection.}
+\item{description}{Extended description of coordinate projection used for receptors.}
 
 \item{zone}{UTM zone of coordinates.}
 }
@@ -23,7 +23,7 @@ Create a data frame of projection details for AERMOD receptors.
 proj_tbl(projection  = "Coordinate System UTM")
 }
 \keyword{aermod}
-\keyword{input}
 \keyword{options}
+\keyword{output}
 \keyword{projection}
 

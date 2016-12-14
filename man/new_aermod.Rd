@@ -4,29 +4,49 @@
 \alias{new_aermod}
 \title{Create AERMOD input tables}
 \usage{
-new_aermod(control = "control", sources = "sources", met = "met",
-  output = "out")
+new_aermod(as_one_df = TRUE, add_to_envir = FALSE,
+  input_table = "aermod_inp", control = "control", sources = "sources",
+  receptors = "receptors", met = "met", out = "out")
 }
 \arguments{
-\item{control}{Name for control options data frame. Default is "control".}
+\item{as_one_df}{\code{TRUE} or \code{FALSE}. 
+Return all inputs in a single wide data frame. 
+If \code{FALSE}, 5 data frames are returned in a list: 
+     (1) control
+     (2) sources
+     (3) receptors
+     (4) meteorology
+     (5) output}
 
-\item{sources}{Name for emission source data frame. Default is "sources".}
+\item{add_to_envir}{\code{TRUE} or \code{FALSE}. 
+Exports tables directly to the Global Environment.}
 
-\item{met}{Name for meteorology options data frame. Default is "met".}
+\item{input_table}{Name for the joined input data frame added to Global Environment. Default is "aermod_inp". Ignored if \code{as_one_df} is \code{FALSE}.}
 
-\item{output}{Name for output options data frame. Default is "output".}
+\item{control}{Name for control options data frame added to Global Environment. Default is "control". Ignored if \code{as_one_df} is \code{TRUE}.}
+
+\item{sources}{Name for emission source data frame added to Global Environment. Default is "sources". Ignored if \code{as_one_df} is \code{TRUE}.}
+
+\item{receptors}{Name for receptor data frame added to Global Environment. Default is "receptors". Ignored if \code{as_one_df} is \code{TRUE}.}
+
+\item{met}{Name for meteorology options data frame added to Global Environment. Default is "met". Ignored if \code{as_one_df} is \code{TRUE}.}
+
+\item{out}{Name for output options data frame added to Global Environment. Default is "output". Ignored if \code{as_one_df} is \code{TRUE}.}
 }
 \description{
 Create default AERMOD input data frames: 
 (1) Control options 
 (2) Source parameters
-(3) Meteorology data
-(4) Output options
+(3) Receptor parameters
+(4) Meteorology options
+(5) Output options
 }
 \examples{
+master_table <- new_aermod(as_one_df = TRUE)
 
+new_aermod(as_one_df = FALSE, add_to_envir = TRUE, met = "rochester_met")
 
-new_aermod()
+input_list <- new_aermod(as_one_df = FALSE, met = "rochester_met")
 }
 \keyword{aermod}
 \keyword{input}

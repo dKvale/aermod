@@ -6,8 +6,9 @@
 #' @keywords receptors aermod input
 #' @export
 #' @examples
-#' receptor_tbl(RECTFILE = "..\\Receptors\\circleReceptors.ROU")
-# 
+#' \dontrun{
+#' receptor_tbl(rect_file = "..\\Receptors\\circleReceptors.ROU")
+#' }
 #
 
 receptor_tbl <- function(rect_file = "",

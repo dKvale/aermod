@@ -4,16 +4,27 @@
 \alias{read_aermod_inp}
 \title{Read AERMOD input file}
 \usage{
-read_aermod_inp(file = "aermod.inp")
+read_aermod_inp(file = "aermod.inp", as_one_df = TRUE)
 }
 \arguments{
-\item{file}{File location. Default is "aermod.inp" in the working directory.}
+\item{file}{File location. Defaults to "aermod.inp".}
+
+\item{as_one_df}{\code{TRUE} or \code{FALSE}. 
+Return all inputs in a single wide data frame. 
+If \code{FALSE}, 5 data frames are returned in a list: 
+     (1) control
+     (2) sources
+     (3) receptors
+     (4) meteorology
+     (5) output}
 }
 \description{
 Read an aermod.inp file into an AERMOD input table.
 }
 \examples{
+\dontrun{
 read_aermod_inp(file = "aermod.inp")
+}
 }
 \keyword{aermod}
 \keyword{input}

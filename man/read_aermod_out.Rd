@@ -7,13 +7,15 @@
 read_aermod_out(file = "aermod.out")
 }
 \arguments{
-\item{file}{File location. Defaults to "aermod.out".}
+\item{file}{File l ocation. Defaults to "aermod.out".}
 }
 \description{
 Read an aermod.out file into a dataframe.
 }
 \examples{
+\dontrun{
 read_aermod_out(file = "aermod.out")
+}
 }
 \keyword{aermod}
 \keyword{output}

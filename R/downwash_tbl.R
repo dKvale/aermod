@@ -9,21 +9,20 @@
 # 
 # 
 
-downwash_tbl <- function(STACK = "STK_1",
+downwash_tbl <- function(STACK     = "STK_1",
                          BUILDHGTS = "",
                          BUILDWIDS = "",
                          BUILDLENS = "",
-                         XBADJ = "",
-                         YBADJ = ""
+                         XBADJ     = "",
+                         YBADJ     = ""
 ) {
 
-df <- data.frame(STACK     = STACK,
-                 BUILDHGTS = BUILDHGTS,
-                 BUILDWIDS = BUILDWIDS,
-                 BUILDLENS = BUILDLENS,
-                 XBADJ     = XBADJ,
-                 YBADJ     = YBADJ,
-                 stringsAsFactors = F)
+df <- tibble::tibble(STACK     = STACK,
+                     BUILDHGTS = BUILDHGTS,
+                     BUILDWIDS = BUILDWIDS,
+                     BUILDLENS = BUILDLENS,
+                     XBADJ     = XBADJ,
+                     YBADJ     = YBADJ)
 return(df)
 }
 

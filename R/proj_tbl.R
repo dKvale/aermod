@@ -1,10 +1,10 @@
 #' Projection details
 #'
 #' Create a data frame of projection details for AERMOD receptors.
-#' @param projection Coordinate projection of receptors.
-#' @param description Coordinate projection.
+#' @param projection Name of coordinate projection used for receptors.
+#' @param description Extended description of coordinate projection used for receptors.
 #' @param zone UTM zone of coordinates.
-#' @keywords projection options aermod input
+#' @keywords projection options aermod output
 #' @export
 #' @examples
 #' proj_tbl(projection  = "Coordinate System UTM")
@@ -16,7 +16,7 @@ proj_tbl <- function(projection  = "Coordinate System UTM",
                      dtmrgn      = "conus",
                      units       = "m",
                      zone        = "15", 
-                     zoneinx     = "0"
+                     zone_inx     = "0"
 ) {
   
   df <- tibble::tibble(projection   = projection,
@@ -25,7 +25,7 @@ proj_tbl <- function(projection  = "Coordinate System UTM",
                        dtmrgn       = dtmrgn,
                        units        = units,
                        zone         = zone, 
-                       zoneinx      = zoneinx)
+                       zone_inx     = zone_inx)
   
   return(df)
 }

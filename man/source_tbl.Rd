@@ -4,15 +4,16 @@
 \alias{source_tbl}
 \title{Source options}
 \usage{
-source_tbl(id = c("SV01", "SV02"), description = c("boiler1", "boiler2"),
-  elevation_m = c(361.33, 361.33), x_coord = c(461874.9, 471977.5),
-  y_coord = c(4631367, 4811367), type = c("point", "point"),
-  emissions = c(1, 1), emis_unit = "g/s", height_m = c(10, 12),
-  temp_k = c(600, 610), velocity_ms = c(30, 25), diameter_m = c(2, 2),
-  downwash_file = "", group_id = "")
+source_tbl(source_id = c("SV01"), description = c("boiler1"),
+  elevation_m = c(361.33), x_coord = c(461874.9), y_coord = c(4631367),
+  type = c("point"), emissions = c(1), emis_units = "g/s",
+  height_m = c(10), temp_k = c(600), velocity_ms = c(30),
+  diameter_m = c(2), downwash_file = "", group_id = "")
 }
 \arguments{
-\item{id}{Source ID. For multiple sources use a vector: \code{c("SV01", "SV02")}.}
+\item{source_id}{Source ID. For multiple sources use a vector: \code{c("SV01", "SV02")}.}
+
+\item{description}{Short description of emission source as a text string. For multiple sources use a vector: \code{c("bolier1", "boiler2")}.}
 
 \item{elevation_m}{Source elevation in meters. For multiple sources use a vector: \code{c(333, 334)}.}
 
@@ -26,6 +27,10 @@ For multiple sources use a vector: \code{c("point", "volumne")}.}
 
 \item{emissions}{Emission rate for each source. For multiple sources use a vector: \code{c(1, 2)}.}
 
+\item{emis_units}{Units of measurement for \code{emissions}.
+Options: (1) "g/s", (2) "lb/hr", or (3) "tons/yr". 
+For multiple sources use a vector: \code{c("g/s", "lb/hr")}.}
+
 \item{height_m}{Height of source in meters. For multiple sources use a vector: \code{c(10, 10)}}
 
 \item{temp_k}{Exit temperature of air emissions in Kelvin. For multiple sources use a vector: \code{c(610, 600)}.}
@@ -36,19 +41,17 @@ For multiple sources use a vector: \code{c("g/s", "lb/hr")}.}
 
 \item{diameter_m}{Source diameter in meters. For multiple sources use a vector: \code{c(1, 1.1)}.}
 
+\item{downwash_file}{Path to downwash parameters for each emission source. For multiple sources use a vector: \code{c("sv01.bpip", "sv02.bpip")}.}
+
 \item{group_id}{Group IDs assigned to source. 
 Separate multiple groups with a comma: \code{"All, SV01, SV01_to_SV03"}.
 If blank, source is assigned to group "All".}
-
-\item{emis_units}{Units of measurement for \code{emissions}.
-Options: (1) "g/s", (2) "lb/hr", or (3) "tons/yr". 
-For multiple sources use a vector: \code{c("g/s", "lb/hr")}.}
 }
 \description{
 Create an input table of AERMOD source options.
 }
 \examples{
-source_tbl(id = "Stack_1", elevation = 300)
+source_tbl(source_id = "Stack_1", elevation = 300)
 }
 \keyword{aermod}
 \keyword{input}

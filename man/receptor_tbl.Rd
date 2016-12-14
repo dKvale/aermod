@@ -15,7 +15,9 @@ receptor_tbl(rect_file = "", rou_text = "")
 Create an input table of AERMOD receptor options.
 }
 \examples{
-receptor_tbl(RECTFILE = "..\\\\Receptors\\\\circleReceptors.ROU")
+\dontrun{
+receptor_tbl(rect_file = "..\\\\Receptors\\\\circleReceptors.ROU")
+}
 }
 \keyword{aermod}
 \keyword{input}

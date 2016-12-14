@@ -4,13 +4,13 @@
 \alias{run_aermod}
 \title{Run AERMOD}
 \usage{
-run_aermod(input = "aermod.inp", output = input$TITLEONE,
+run_aermod(input = "aermod.inp", output = input$title_one,
   exe_folder = "aermod")
 }
 \arguments{
 \item{input}{Path to input file.}
 
-\item{output}{Filename for model results. Defaults to `TITLEONE` of input file.}
+\item{output}{Filename for model results. Defaults to `title_one` of input file.}
 
 \item{exe_folder}{Folder containing aermod.exe.}
 }
@@ -18,9 +18,11 @@ run_aermod(input = "aermod.inp", output = input$TITLEONE,
 Call aermod.exe and run input file
 }
 \examples{
-run_aermod(data = "aermod.inp", 
-           output = "aermod_results", 
+\dontrun{
+run_aermod(data       = "aermod.inp", 
+           output     = "aermod_results", 
            exe_folder = "aermod_exe")
+}
 }
 \keyword{EPA}
 \keyword{aermod}
