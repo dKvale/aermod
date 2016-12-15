@@ -63,9 +63,9 @@ if(!is.null(co$subtitle) & !is.na(co$subtitle) & nchar(co$subtitle) > 0) {
   inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
 }
 
-inp_text <- paste0(inp_text, "   MODELOPT ", paste(co$model_opt, collapse = " "), "\n")
-
-inp_text <- paste0(inp_text, "   AVERTIME ", paste(co$avg_time, collapse = " "), "\n")
+inp_text <- paste0(inp_text, 
+                   "   MODELOPT ", paste(co$model_opt, collapse = " "), "\n",
+                   "   AVERTIME ", paste(co$avg_time, collapse = " "), "\n")
 
 if(!is.null(co$urban_opt) & !is.na(co$urban_opt) & nchar(co$urban_opt) > 0) {
   inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt, collapse = " "), "\n")
@@ -85,9 +85,9 @@ if(!is.null(co$flagpole) & !is.na(co$flagpole) & nchar(as.character(co$flagpole)
   inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
 }
 
-inp_text <- paste0(inp_text, "   RUNORNOT RUN\n")
-  
-inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
+inp_text <- paste0(inp_text, 
+                   "   RUNORNOT RUN\n")
+                   section, " FINISHED \n**\n")
  
 
 ## Source pathway ##
@@ -99,9 +99,9 @@ inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line
 
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
-inp_text <- paste0(inp_text, "** Source Locations **\n")
-
-inp_text <- paste0(inp_text, "**          source_id    type       x_coord     y_coord          elevation_m **\n")
+inp_text <- paste0(inp_text,
+                   "** Source Locations **\n",
+                   "**          source_id    type       x_coord     y_coord          elevation_m **\n")
 
 inp_text <- paste0(inp_text, paste0("   LOCATION ",        
                    receptors::fw(so$source_id, 13),
@@ -112,9 +112,9 @@ inp_text <- paste0(inp_text, paste0("   LOCATION ",
                    "** DESCRSRC ", so$description, "\n", 
                    collapse = ""))
 
-inp_text <- paste0(inp_text, "\n** Source Parameters **\n")
-
-inp_text <- paste0(inp_text, "**          source_id    g/s  ht_m     temp_K   vel_m/s   diameter_m **\n")
+inp_text <- paste0(inp_text, 
+                   "\n** Source Parameters **\n",
+                   "**          source_id    g/s  ht_m     temp_K   vel_m/s   diameter_m **\n")
 
 inp_text <- paste0(inp_text, paste0("   SRCPARAM ", 
                    receptors::fw(so$source_id,   13),
@@ -161,17 +161,26 @@ section <- "RE"
 
 section_head <- "Receptor pathway"
 
-inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
+inp_text <- paste0(inp_text, comment_line, " ", 
+                   section_head, "\n", 
+                   comment_line, "\n")
 
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
-if(!is.null(re$rect_file) & !is.na(re$rect_file) & nchar(as.character(re$rect_file)) > 0) {
+if(!is.null(re$recept_file) & !is.na(re$recept_file) & nchar(as.character(re$recept_file)) > 0) {
   
-   inp_text <- paste0(inp_text, "** The receptor file is attached by the INCLUDED statement below.\n")
+   inp_text <- paste0(inp_text, 
+                      "** The receptor file is attached by the INCLUDED statement below.\n")
 
-   inp_text <- paste0(inp_text, "   INCLUDED ", re$rect_file, "\n")
+                      "   INCLUDED ", re$recept_file, "\n")
 }
 
+if(!is.null(re$recept_as_text) & !is.na(re$recept_as_text) & nchar(as.character(re$recept_as_text)) > 0) {
+  
+  inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n")
+  
+  inp_text <- paste0(inp_text, re$recept_as_text, "\n")
+}
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
@@ -185,7 +194,25 @@ inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line
 
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
+inp_text <- paste0(inp_text, 
+                   
+                   "   SURFFILE ", me$surf_file, "\n",
 
+                   "   PROFFILE ", me$prof_file, "\n",
+
+                   "   SURFDATA ", me$surf_site_info , "\n",
+
+                   "   UAIRDATA ", me$upper_air_info, "\n",
+
+                   "   PROFBASE ", me$base_elev_m, "\n")
+
+if(!is.null(me$start_date) & !is.na(me$start_date)) {
+  inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date, me$end_date) "\n")
+}
+
+
+# Test AERMOD input file with missing start end dates
+## If error, grab first time of provided surface met data.
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
@@ -199,19 +226,22 @@ inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line
 
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
-
+inp_text <- paste0(inp_text, 
+                   "   RECTABLE ", ou$rect_table, "\n")
+                   "   MAXTABLE ", ou$max_table, "\n")
+                   "   DAYTABLE ", ou$day_table, "\n")
+                   "   PLOTFILE ", ou$plot_file, "\n")
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
-
 # Return results
 cat("\nGenerated input file: \n\n")
-invisible(writeLines(inp))
+invisible(writeLines(inp_text))
   
 if(is.null(path) | nchar(path) < 1) {
   return(inp)
-} else  writeLines(inp, path)
+} else  writeLines(inp_text, path)
   
 }
 
