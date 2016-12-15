@@ -21,7 +21,7 @@
 #' @param diameter_m Source diameter in meters. For multiple sources use a vector: \code{c(1, 1.1)}.                    
 #' @param downwash_file Path to downwash parameters for each emission source. For multiple sources use a vector: \code{c("sv01.bpip", "sv02.bpip")}.
 #' @param group_id Group IDs assigned to source. 
-#'                 Separate multiple groups with a comma: \code{"All, SV01, SV01_to_SV03"}.
+#'                 To assign multiple groups use a vector: \code{c("ALL", "SV01", "SV01_to_SV03"}.
 #'                 If blank, source is assigned to group "All".
 #' @keywords source aermod input
 #' @export
@@ -42,8 +42,8 @@ source_tbl <- function(source_id     = c("SV01"),
                        temp_k        = c(600),
                        velocity_ms   = c(30),
                        diameter_m    = c(2),
-                       downwash_file = "",
-                       group_id      = ""
+                       downwash_file = NA,
+                       group_id      = NA
 ) {
   df <- tibble::tibble(source_id     = source_id,
                        description   = description,
@@ -58,7 +58,7 @@ source_tbl <- function(source_id     = c("SV01"),
                        velocity_ms   = velocity_ms,
                        diameter_m    = diameter_m,
                        downwash_file = downwash_file,
-                       group_id      = ifelse(nchar(group_id) < 1, "ALL", group_id))
+                       group_id      = ifelse(is.null(group_id) || is.na(group_id) || nchar(group_id) < 1, list("ALL"), list(group_id)))
   return(df)
  
 }

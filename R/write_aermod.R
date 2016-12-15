@@ -59,14 +59,15 @@ inp_text <- paste0(inp_text, section, " STARTING \n")
 
 inp_text <- paste0(inp_text, "   TITLEONE ", co$title, "\n")
 
-if(nchar(co$subtitle) > 0) {
+if(!is.null(co$subtitle) & !is.na(co$subtitle) & nchar(co$subtitle) > 0) {
   inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
 }
 
 inp_text <- paste0(inp_text, "   MODELOPT ", paste(co$model_opt, collapse = " "), "\n")
+
 inp_text <- paste0(inp_text, "   AVERTIME ", paste(co$avg_time, collapse = " "), "\n")
 
-if(!is.na(co$urban_opt) & nchar(co$urban_opt) > 0) {
+if(!is.null(co$urban_opt) & !is.na(co$urban_opt) & nchar(co$urban_opt) > 0) {
   inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt, collapse = " "), "\n")
 }
 
@@ -80,13 +81,13 @@ inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
 #  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
 #} 
 
-if(!is.na(co$flagpole) & nchar(as.character(co$flagpole))> 0) {
+if(!is.null(co$flagpole) & !is.na(co$flagpole) & nchar(as.character(co$flagpole)) > 0) {
   inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
 }
 
 inp_text <- paste0(inp_text, "   RUNORNOT RUN\n")
   
-inp_text <- paste0(inp_text, section, " FINISHED \n")
+inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
  
 
 ## Source pathway ##
@@ -98,39 +99,61 @@ inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line
 
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
-op <- paste0(op, "** Source Locations **\n")
-op <- paste0(op, "**          SourceID     Type       X Coord     Y Coord          Elevat **\n")
-op <- paste0(op, paste0("   LOCATION ",        
-                        fw(object@ID, width = 13),
-                        fw(object@TYPE, width = 11),
-                        fw(object@XCOORD, width = 12),
-                        fw(object@YCOORD, width = 17),
-                        object@ELEV, "\n",
-                        "** DESCRSRC ", object@DESCRSRC, "\n", 
-                        collapse=""))
+inp_text <- paste0(inp_text, "** Source Locations **\n")
 
-op <- paste0(op, "\n** Source Parameters **\n")
-op <- paste0(op, "**          SourceID     g/s  (ht,m)   (temp,K) (vel,m/s) (diam,m) **\n")
-op <- paste0(op, paste0("   SRCPARAM ", 
-                        fw(object@ID, width = 13),
-                        fw(object@EMISS, width = 5),
-                        fw(object@HEIGHT, width = 9),
-                        fw(object@TEMPK, width = 9),
-                        fw(object@VELOCITY, width = 10),
-                        object@DIAMETER, "\n",
-                        collapse=""))
+inp_text <- paste0(inp_text, "**          source_id    type       x_coord     y_coord          elevation_m **\n")
 
-op <- paste0(op, "\n** Building Downwash **\n",
-             "** The building downwash file is attached by the INCLUDED statement\n")
-op <- paste0(op, "   INCLUDED ", object@DOWNFILE, "\n")
+inp_text <- paste0(inp_text, paste0("   LOCATION ",        
+                   receptors::fw(so$source_id, 13),
+                   receptors::fw(so$type,      11),
+                   receptors::fw(so$x_coord,   12),
+                   receptors::fw(so$y_coord,   17),
+                   so$elevation_m, "\n",
+                   "** DESCRSRC ", so$description, "\n", 
+                   collapse = ""))
 
-op <- paste0(op, "\n** Source Groups Defined\n")
-op <- paste0(op, paste0("   SRCGROUP ", 
-                        fw(object@GROUPID, width = 5),
-                        ifelse(object@GROUPID == "ALL", "", object@GROUPSRC),"\n", 
-                        collapse=""))
+inp_text <- paste0(inp_text, "\n** Source Parameters **\n")
 
-inp_text <- paste0(inp_text, section, " FINISHED \n")
+inp_text <- paste0(inp_text, "**          source_id    g/s  ht_m     temp_K   vel_m/s   diameter_m **\n")
+
+inp_text <- paste0(inp_text, paste0("   SRCPARAM ", 
+                   receptors::fw(so$source_id,   13),
+                   receptors::fw(so$emissions,   5),
+                   receptors::fw(so$height_m,    9),
+                   receptors::fw(so$temp_k,      9),
+                   receptors::fw(so$velocity_ms, 10),
+                   so$diameter_m, "\n",
+                   collapse = ""))
+
+if(!is.null(so$downwash_file) & !is.na(so$downwash_file) & nchar(as.character(so$downwash_file)) > 0) {
+  
+  inp_text <- paste0(inp_text, "\n** Building Downwash **\n",
+                     "** The building downwash file is attached by the INCLUDED statement below.\n")
+
+  inp_text <- paste0(inp_text, "   INCLUDED ", so$downwash_file, "\n")
+}
+
+inp_text <- paste0(inp_text, "\n** Source groups defined\n")
+
+# Test table
+#so <- source_tbl() %>% rbind(source_tbl()) 
+#so[2, c(1,14)] <- c("SV02", "SV02")
+#so <- mutate(so, group_id = list(c("ALL","SV01"), c("ALL", "SV02")))
+
+# Split multiple group_ids
+if(is.list(so$group_id)) so <- tidyr::unnest(so[ , c("source_id", "group_id")])
+
+# Paste together sources assigned to the same group_id
+for(group_x in unique(so$group_id)) {
+  
+  inp_text <- paste0(inp_text, paste0("   SRCGROUP ", 
+                     receptors::fw(toupper(group_x), 5),
+                     ifelse(toupper(group_x) == "ALL", "", toupper(paste(subset(so, group_id == group_x)$source_id))),
+                     "\n", 
+                     collapse = ""))
+}
+
+inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
 ## Receptor pathway ##
@@ -142,9 +165,15 @@ inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line
 
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
+if(!is.null(re$rect_file) & !is.na(re$rect_file) & nchar(as.character(re$rect_file)) > 0) {
+  
+   inp_text <- paste0(inp_text, "** The receptor file is attached by the INCLUDED statement below.\n")
+
+   inp_text <- paste0(inp_text, "   INCLUDED ", re$rect_file, "\n")
+}
 
 
-inp_text <- paste0(inp_text, section, " FINISHED \n")
+inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
 ## Meteorology Pathway ##
@@ -158,7 +187,7 @@ inp_text <- paste0(inp_text, section, " STARTING \n")
 
 
 
-inp_text <- paste0(inp_text, section, " FINISHED \n")
+inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
 ## Output Pathway ##
@@ -166,13 +195,13 @@ section <- "OU"
 
 section_head <- "Output Pathway"
 
-out <- paste0(out, comment_line, " ", section_head, "\n", comment_line, "\n")
+inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
 
-out <- paste0(out, section, " STARTING \n")
+inp_text <- paste0(inp_text, section, " STARTING \n")
 
 
 
-out <- paste0(out, section, " FINISHED \n")
+inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
 
