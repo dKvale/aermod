@@ -4,22 +4,22 @@
 #' @param title Title of modeling run. `TITLEONE` of AERMOD input file.
 #' @param subtitle Subtitle of modeling run. `TITLETWO` of AERMOD input file.
 #' @param model_opt Model run options. 
-#'                  Separate multiple options with a comma: \code{"DFAULT, CONC"}. 
+#'                  Enter multiple options as a vector: \code{c("DFAULT", "CONC")}. 
 #'                  For a complete list of options, see 'MODELOPT' in the AERMOD reference guide at 
 #'                  https://www3.epa.gov/ttn/scram/models/aermod/aermod_quick-reference-guide.pdf. 
-#' @param avg_time Dispersion factor averaging times. Separate multiple options with a comma: \code{"1, 24, ANNUAL"}.
-#' @param urban_opt Urban options for AERMOD run. Separate multiple options with a comma: \code{"500000 Minneapolis"}. 
-#' @param pollutant_id Pollutant ID. Options: (1) "NO2" (2)... 
+#' @param avg_time Dispersion factor averaging times. Enter multiple options as a vector: \code{c("1", "24", "ANNUAL")}.
+#' @param urban_opt Urban options for AERMOD run. Enter multiple options as a vector: \code{c("400000", "Minneapolis")}. 
+#' @param pollutant_id Pollutant ID. Options: (1) "NO2"  (2) "SO2"  (3) "OTHER"... 
 #' @param flagpole Flagpole options.
 #' @param event_file File to write AERMOD 'events' to.
 #' @param error_file File to write AERMOD errors to.
 #' @param multi_year Options for performing multiple "year" AERMOD runs. 
-#'                   Used for identifying the highest annual value across multiple years of met data.
+#'                   Use for identifying the highest annual value across multiple years of met data.
 #' @param debug_opt Automatic debugging options performed by AERMOD.
 #' @keywords control options aermod input
 #' @export
 #' @examples
-#' control_tbl(title = "Demo Energy Station")
+#' control_tbl(title = "My New Space Station")
 #'
 #
 
