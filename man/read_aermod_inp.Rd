@@ -4,7 +4,7 @@
 \alias{read_aermod_inp}
 \title{Read AERMOD input file}
 \usage{
-read_aermod_inp(file = "aermod.inp", as_one_df = TRUE)
+read_aermod_inp(file, as_one_df = TRUE)
 }
 \arguments{
 \item{file}{File location. Defaults to "aermod.inp".}

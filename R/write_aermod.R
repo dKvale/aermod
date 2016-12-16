@@ -9,6 +9,7 @@
 #' @param met Data frame of meteorology parameters. If blank, meteorology parameters from \code{data} are used. 
 #' @param out Data frame of output parameters. If blank, output parameters from \code{data} are used. 
 #' @keywords aermod write save input
+#' @importFrom receptors "fw"
 #' @export
 #' @examples
 #' aermod_inp <- new_aermod()
@@ -17,72 +18,102 @@
 # 
 # 
 
-write_aermod <- function(data      = data.frame(), 
-                         path      = "aermod.inp",
-                         control   = data.frame(),
-                         sources   = data.frame() ,
-                         receptors = data.frame(),
-                         met       = data.frame(),
-                         out       = data.frame()
+write_aermod <- function(data      = NULL, 
+                         path      = NULL,
+                         control   = NULL,
+                         sources   = NULL,
+                         receptors = NULL,
+                         met       = NULL,
+                         out       = NULL
 ) {
 
 # Data tests    
-if((is.null(data) & is.null(sources)) || (nrow(data) < 1 & nrow(sources) < 1)) {
-  return("Data frame is empty. AERMOD requires at least 1 emission source")
+if((is.null(data) || nrow(data) < 1) & (is.null(sources) || nrow(sources) < 1)) {
+  return("Data frame is empty. AERMOD requires at least 1 emission source.")
 }
   
-# Create temp tables
-if(is.null(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control}
+## Use pathway specific tables if provided
+if(is.null(control) || !is.data.frame(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control}
 
-if(is.null(sources) || nrow(sources) < 1) {so <- data} else {so <- sources}
+if(is.null(sources) || !is.data.frame(sources) || nrow(sources) < 1) {so <- data} else {so <- sources}
 
-if(is.null(receptors) || nrow(receptors) < 1) {re <- data[1, ]} else {re <- receptors}
+if(is.null(receptors) || !is.data.frame(receptors) || nrow(receptors) < 1) {re <- data[1, ]} else {re <- receptors}
 
-if(is.null(met) || nrow(met) < 1) {me <- data[1, ]} else {me <- met}
+if(is.null(met) || !is.data.frame(met) || nrow(met) < 1) {me <- data[1, ]} else {me <- met}
 
-if(is.null(out) || nrow(out) < 1) {ou <- data[1, ]} else {ou <- out}
+if(is.null(out) || !is.data.frame(out) || nrow(out) < 1) {ou <- data[1, ]} else {ou <- out}
+
   
-  
+# Replace `NA` values with blanks to avoid printing 'NA'
+co[is.na(co)] <- ""  
+
+so[is.na(so)] <- ""  
+
+re[is.na(re)] <- ""  
+
+me[is.na(me)] <- ""  
+
+ou[is.na(ou)] <- ""  
+
+
 # Create text file
-comment_line <- "****************************************\n**"
 
-indent       <- "   "
+## Header
+inp_text <- paste0("**\n",
+                   "** AERMOD input file\n",
+                   "** Created: ", format(Sys.Date(), "%m/%d/%Y"), "\n",
+                   "**\n")  
+
+## New section function
+new_section  <- function(section_code   = section, 
+                         section_header = section_head,
+                         comment_line   = paste(paste(rep("*", 40), collapse = ""), "\n**")) {
   
+  paste0(comment_line, 
+           " ", section_header, "\n", 
+           comment_line, "\n",
+           section_code, " STARTING \n")
+  }
+
+## Test length function
+is_min_length <- function(x, length = 1) {
+  
+  if(is.null(x) || is.na(x)) return(FALSE) 
+  
+  if(is.character(x)) return(nchar(x) >= length)
+  
+  if(is.data.frame(x)) return(nrow(x) >= length)
+}
 
 ## Control pathway ##
 section <- "CO"
-
 section_head <- "Control pathway"
     
-inp_text <- paste0(comment_line, " ", section_head, "\n", comment_line, "\n")
+inp_text <- paste0(inp_text, new_section())
 
-inp_text <- paste0(inp_text, section, " STARTING \n")
+inp_text <- paste0(inp_text, "   TITLEONE ", co$title[1], "\n")
 
-inp_text <- paste0(inp_text, "   TITLEONE ", co$title, "\n")
-
-if(!is.null(co$subtitle) & !is.na(co$subtitle) & nchar(co$subtitle) > 0) {
-  inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
-}
+inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle[1], "\n")
 
 inp_text <- paste0(inp_text, 
-                   "   MODELOPT ", paste(co$model_opt, collapse = " "), "\n",
-                   "   AVERTIME ", paste(co$avg_time, collapse = " "), "\n")
+                   "   MODELOPT ", paste(co$model_opt[1], collapse = " "), "\n",
+                   "   AVERTIME ", paste(co$avg_time[1], collapse = " "), "\n")
 
-if(!is.null(co$urban_opt) & !is.na(co$urban_opt) & nchar(co$urban_opt) > 0) {
-  inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt, collapse = " "), "\n")
+if(is_min_length(co$urban_opt[1], 1)) {
+  inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt[1], collapse = " "), "\n")
 }
 
-inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
+inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id[1], "\n")
 
-#if(!is.na(co$half_life) &  nchar(as.character(co$half_life)) > 0)  {
+#if(!is.null(co$half_life) &  nchar(as.character(co$half_life)) > 0)  {
 #  inp_text <- paste0(inp_text, "   HALFLIFE ", co$half_life, "\n")
 #}
-#if(!is.na(co$decay_coef) & nchar(as.character(co$decay_coef)) > 0) {
+#if(!is.null(co$decay_coef) & nchar(as.character(co$decay_coef)) > 0) {
 #  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
 #} 
 
-if(!is.null(co$flagpole) & !is.na(co$flagpole) & nchar(as.character(co$flagpole)) > 0) {
-  inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
+if(is_min_length(co$flagpole[1], 1)) {
+  inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole[1], "\n")
 }
 
 inp_text <- paste0(inp_text, 
@@ -92,12 +123,9 @@ inp_text <- paste0(inp_text,
 
 ## Source pathway ##
 section <- "SO"
-
 section_head <- "Source pathway"
 
-inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
-
-inp_text <- paste0(inp_text, section, " STARTING \n")
+inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text,
                    "** Source Locations **\n",
@@ -125,20 +153,15 @@ inp_text <- paste0(inp_text, paste0("   SRCPARAM ",
                    so$diameter_m, "\n",
                    collapse = ""))
 
-if(!is.null(so$downwash_file) & !is.na(so$downwash_file) & nchar(as.character(so$downwash_file)) > 0) {
+if(is_min_length(so$downwash_file[1], 1)) {
   
   inp_text <- paste0(inp_text, "\n** Building Downwash **\n",
                      "** The building downwash file is attached by the INCLUDED statement below.\n")
 
-  inp_text <- paste0(inp_text, "   INCLUDED ", so$downwash_file, "\n")
+  inp_text <- paste0(inp_text, "   INCLUDED ", so$downwash_file[1], "\n")
 }
 
 inp_text <- paste0(inp_text, "\n** Source groups defined\n")
-
-# Test table
-#so <- source_tbl() %>% rbind(source_tbl()) 
-#so[2, c(1,14)] <- c("SV02", "SV02")
-#so <- mutate(so, group_id = list(c("ALL","SV01"), c("ALL", "SV02")))
 
 # Split multiple group_ids
 if(is.list(so$group_id)) so <- tidyr::unnest(so[ , c("source_id", "group_id")])
@@ -158,27 +181,21 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 ## Receptor pathway ##
 section <- "RE"
-
 section_head <- "Receptor pathway"
 
-inp_text <- paste0(inp_text, comment_line, " ", 
-                   section_head, "\n", 
-                   comment_line, "\n")
+inp_text <- paste0(inp_text, new_section())
 
-inp_text <- paste0(inp_text, section, " STARTING \n")
-
-if(!is.null(re$recept_file) & !is.na(re$recept_file) & nchar(as.character(re$recept_file)) > 0) {
+if(is_min_length(re$recept_file[1], 1)) {
   
    inp_text <- paste0(inp_text, 
                       "** The receptor file is attached by the INCLUDED statement below.\n",
-                      "   INCLUDED ", re$recept_file, "\n")
+                      "   INCLUDED ", re$recept_file[1], "\n")
 }
 
-if(!is.null(re$recept_as_text) & !is.na(re$recept_as_text) & nchar(as.character(re$recept_as_text)) > 0) {
+if(is_min_length(re$recept_as_text[1], 1)) {
   
-  inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n")
-  
-  inp_text <- paste0(inp_text, re$recept_as_text, "\n")
+  inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n",
+                     re$recept_as_text[1], "\n")
 }
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
@@ -186,28 +203,21 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 ## Meteorology Pathway ##
 section <- "ME"
-
 section_head <- "Meteorology Pathway"
 
-inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
+inp_text <- paste0(inp_text, new_section())
 
-inp_text <- paste0(inp_text, section, " STARTING \n",
-      
-                   "   SURFFILE ", me$surf_file, "\n",
-
-                   "   PROFFILE ", me$prof_file, "\n",
-
-                   "   SURFDATA ", me$surf_site_info , "\n",
-
-                   "   UAIRDATA ", me$upper_air_info, "\n",
-
-                   "   PROFBASE ", me$base_elev_m, "\n")
+inp_text <- paste0(inp_text, 
+                   "   SURFFILE ", me$surf_file[1], "\n",
+                   "   PROFFILE ", me$prof_file[1], "\n",
+                   "   SURFDATA ", me$surf_site_info[1], "\n",
+                   "   UAIRDATA ", me$upper_air_info[1], "\n",
+                   "   PROFBASE ", me$base_elev_m[1], "\n")
 
 # Check for start and end date
-if(!is.null(me$start_date) & !is.na(me$start_date) & nchar(me$start_date) > 6) {
-  if(!is.null(me$end_date) & !is.na(me$end_date) & nchar(me$end_date) > 6) {
-    
-  inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date, me$end_date), "\n")
+if(is_min_length(me$start_date[1], 6)) {
+  if(is_min_length(me$end_date[1], 6)) {
+    inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date[1], me$end_date[1]), "\n")
   }
 }
 
@@ -216,18 +226,15 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 ## Output Pathway ##
 section <- "OU"
-
 section_head <- "Output Pathway"
 
-inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
-
-inp_text <- paste0(inp_text, section, " STARTING \n")
+inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   "   RECTABLE ", ou$rect_table, "\n",
-                   "   MAXTABLE ", ou$max_table, "\n",
-                   "   DAYTABLE ", ou$day_table, "\n",
-                   "   PLOTFILE ", ou$plot_file, "\n")
+                   ifelse(is_min_length(ou$rect_table[1]), paste0("   RECTABLE ", ou$rect_table[1], "\n"), ""),
+                   ifelse(is_min_length(ou$max_table[1]),  paste0("   MAXTABLE ", ou$max_table[1], "\n"), ""),
+                   ifelse(is_min_length(ou$day_table[1]),  paste0("   DAYTABLE ", ou$day_table[1], "\n"), ""),
+                   ifelse(is_min_length(ou$plot_file[1]),  paste0("   PLOTFILE ", ou$plot_file[1], "\n"), ""))
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
@@ -236,8 +243,10 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 cat("\nGenerated input file: \n\n")
 invisible(writeLines(inp_text))
   
-if(is.null(path) | nchar(path) < 1) {
-  return(inp)
+if(!is_min_length(path)) {
+  
+  return(inp_text)
+  
 } else  writeLines(inp_text, path)
   
 }

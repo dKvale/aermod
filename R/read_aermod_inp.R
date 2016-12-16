@@ -19,7 +19,7 @@
 #' }
 #
 
-read_aermod_inp <- function(file        = "aermod.inp", 
+read_aermod_inp <- function(file, 
                             as_one_df   = TRUE) {
   
   inp <- readLines(file)

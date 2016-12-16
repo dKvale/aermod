@@ -10,7 +10,7 @@
 #' }
 #
 
-read_aermod_out <- function(file = "aermod.out") {
+read_aermod_out <- function(file) {
   
   out <- readLines(file)
   

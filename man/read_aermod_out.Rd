@@ -4,7 +4,7 @@
 \alias{read_aermod_out}
 \title{Read AERMOD output file}
 \usage{
-read_aermod_out(file = "aermod.out")
+read_aermod_out(file)
 }
 \arguments{
 \item{file}{File l ocation. Defaults to "aermod.out".}

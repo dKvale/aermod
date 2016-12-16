@@ -4,9 +4,8 @@
 \alias{write_aermod}
 \title{Write a data frame to an AERMOD input file.}
 \usage{
-write_aermod(data = data.frame(), path = "aermod.inp",
-  control = data.frame(), sources = data.frame(),
-  receptors = data.frame(), met = data.frame(), out = data.frame())
+write_aermod(data = NULL, path = NULL, control = NULL, sources = NULL,
+  receptors = NULL, met = NULL, out = NULL)
 }
 \arguments{
 \item{data}{Data frame of AERMOD modeling parameters.}
