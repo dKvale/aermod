@@ -5,8 +5,8 @@
 \title{Control options}
 \usage{
 control_tbl(title = "Demo Energy Station",
-  subtitle = "Default Run: Hour, Day, Annual", model_opt = "DFAULT, CONC",
-  avg_time = "1, 24, ANNUAL", urban_opt = as.character(NA),
+  subtitle = "Default Run: Hour, Day, Annual", model_opt = c("DFAULT",
+  "CONC"), avg_time = c("1", "24", "ANNUAL"), urban_opt = as.character(NA),
   pollutant_id = "OTHER", flagpole = as.character(NA),
   event_file = as.character(NA), error_file = as.character(NA),
   multi_year = as.character(NA), debug_opt = as.character(NA))
@@ -17,15 +17,15 @@ control_tbl(title = "Demo Energy Station",
 \item{subtitle}{Subtitle of modeling run. `TITLETWO` of AERMOD input file.}
 
 \item{model_opt}{Model run options. 
-Separate multiple options with a comma: \code{"DFAULT, CONC"}. 
+Enter multiple options as a vector: \code{c("DFAULT", "CONC")}. 
 For a complete list of options, see 'MODELOPT' in the AERMOD reference guide at 
 https://www3.epa.gov/ttn/scram/models/aermod/aermod_quick-reference-guide.pdf.}
 
-\item{avg_time}{Dispersion factor averaging times. Separate multiple options with a comma: \code{"1, 24, ANNUAL"}.}
+\item{avg_time}{Dispersion factor averaging times. Enter multiple options as a vector: \code{c("1", "24", "ANNUAL")}.}
 
-\item{urban_opt}{Urban options for AERMOD run. Separate multiple options with a comma: \code{"500000 Minneapolis"}.}
+\item{urban_opt}{Urban options for AERMOD run. Enter multiple options as a vector: \code{c("400000", "Minneapolis")}.}
 
-\item{pollutant_id}{Pollutant ID. Options: (1) "NO2" (2)...}
+\item{pollutant_id}{Pollutant ID. Options: (1) "NO2"  (2) "SO2"  (3) "OTHER"...}
 
 \item{flagpole}{Flagpole options.}
 
@@ -34,7 +34,7 @@ https://www3.epa.gov/ttn/scram/models/aermod/aermod_quick-reference-guide.pdf.}
 \item{error_file}{File to write AERMOD errors to.}
 
 \item{multi_year}{Options for performing multiple "year" AERMOD runs. 
-Used for identifying the highest annual value across multiple years of met data.}
+Use for identifying the highest annual value across multiple years of met data.}
 
 \item{debug_opt}{Automatic debugging options performed by AERMOD.}
 }
@@ -42,7 +42,7 @@ Used for identifying the highest annual value across multiple years of met data.
 Create an input table of AERMOD control options.
 }
 \examples{
-control_tbl(title = "Demo Energy Station")
+control_tbl(title = "My New Space Station")
 
 }
 \keyword{aermod}

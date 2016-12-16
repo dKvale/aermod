@@ -33,15 +33,15 @@ if((is.null(data) || nrow(data) < 1) & (is.null(sources) || nrow(sources) < 1)) 
 }
   
 ## Use pathway specific tables if provided
-if(is.null(control) || !is.data.frame(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control}
+if(is.null(control) || !is.data.frame(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control[1, ]}
 
 if(is.null(sources) || !is.data.frame(sources) || nrow(sources) < 1) {so <- data} else {so <- sources}
 
-if(is.null(receptors) || !is.data.frame(receptors) || nrow(receptors) < 1) {re <- data[1, ]} else {re <- receptors}
+if(is.null(receptors) || !is.data.frame(receptors) || nrow(receptors) < 1) {re <- data[1, ]} else {re <- receptors[1, ]}
 
-if(is.null(met) || !is.data.frame(met) || nrow(met) < 1) {me <- data[1, ]} else {me <- met}
+if(is.null(met) || !is.data.frame(met) || nrow(met) < 1) {me <- data[1, ]} else {me <- met[1, ]}
 
-if(is.null(out) || !is.data.frame(out) || nrow(out) < 1) {ou <- data[1, ]} else {ou <- out}
+if(is.null(out) || !is.data.frame(out) || nrow(out) < 1) {ou <- data[1, ]} else {ou <- out[1, ]}
 
   
 # Replace `NA` values with blanks to avoid printing 'NA'
@@ -91,19 +91,19 @@ section_head <- "Control pathway"
     
 inp_text <- paste0(inp_text, new_section())
 
-inp_text <- paste0(inp_text, "   TITLEONE ", co$title[1], "\n")
+inp_text <- paste0(inp_text, "   TITLEONE ", co$title, "\n")
 
-inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle[1], "\n")
+inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
 
 inp_text <- paste0(inp_text, 
-                   "   MODELOPT ", paste(co$model_opt[1], collapse = " "), "\n",
-                   "   AVERTIME ", paste(co$avg_time[1], collapse = " "), "\n")
+                   "   MODELOPT ", paste(co$model_opt[[1]], collapse = " "), "\n",
+                   "   AVERTIME ", paste(co$avg_time[[1]], collapse = " "), "\n")
 
-if(is_min_length(co$urban_opt[1], 1)) {
-  inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt[1], collapse = " "), "\n")
+if(is_min_length(co$urban_opt[[1]], 1)) {
+  inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt[[1]], collapse = " "), "\n")
 }
 
-inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id[1], "\n")
+inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
 
 #if(!is.null(co$half_life) &  nchar(as.character(co$half_life)) > 0)  {
 #  inp_text <- paste0(inp_text, "   HALFLIFE ", co$half_life, "\n")
@@ -112,8 +112,8 @@ inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id[1], "\n")
 #  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
 #} 
 
-if(is_min_length(co$flagpole[1], 1)) {
-  inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole[1], "\n")
+if(is_min_length(co$flagpole, 1)) {
+  inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
 }
 
 inp_text <- paste0(inp_text, 
@@ -185,17 +185,17 @@ section_head <- "Receptor pathway"
 
 inp_text <- paste0(inp_text, new_section())
 
-if(is_min_length(re$recept_file[1], 1)) {
+if(is_min_length(re$recept_file, 1)) {
   
    inp_text <- paste0(inp_text, 
                       "** The receptor file is attached by the INCLUDED statement below.\n",
-                      "   INCLUDED ", re$recept_file[1], "\n")
+                      "   INCLUDED ", re$recept_file, "\n")
 }
 
-if(is_min_length(re$recept_as_text[1], 1)) {
+if(is_min_length(re$recept_as_text, 1)) {
   
   inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n",
-                     re$recept_as_text[1], "\n")
+                     re$recept_as_text, "\n")
 }
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
@@ -208,16 +208,16 @@ section_head <- "Meteorology Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   "   SURFFILE ", me$surf_file[1], "\n",
-                   "   PROFFILE ", me$prof_file[1], "\n",
-                   "   SURFDATA ", me$surf_site_info[1], "\n",
-                   "   UAIRDATA ", me$upper_air_info[1], "\n",
-                   "   PROFBASE ", me$base_elev_m[1], "\n")
+                   "   SURFFILE ", me$surf_file, "\n",
+                   "   PROFFILE ", me$prof_file, "\n",
+                   "   SURFDATA ", me$surf_site_info, "\n",
+                   "   UAIRDATA ", me$upper_air_info, "\n",
+                   "   PROFBASE ", me$base_elev_m, "\n")
 
 # Check for start and end date
-if(is_min_length(me$start_date[1], 6)) {
-  if(is_min_length(me$end_date[1], 6)) {
-    inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date[1], me$end_date[1]), "\n")
+if(is_min_length(me$start_date, 6)) {
+  if(is_min_length(me$end_date, 6)) {
+    inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date, me$end_date), "\n")
   }
 }
 
@@ -231,10 +231,10 @@ section_head <- "Output Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   ifelse(is_min_length(ou$rect_table[1]), paste0("   RECTABLE ", ou$rect_table[1], "\n"), ""),
-                   ifelse(is_min_length(ou$max_table[1]),  paste0("   MAXTABLE ", ou$max_table[1], "\n"), ""),
-                   ifelse(is_min_length(ou$day_table[1]),  paste0("   DAYTABLE ", ou$day_table[1], "\n"), ""),
-                   ifelse(is_min_length(ou$plot_file[1]),  paste0("   PLOTFILE ", ou$plot_file[1], "\n"), ""))
+                   ifelse(is_min_length(ou$rect_table), paste0("   RECTABLE ", ou$rect_table, "\n"), ""),
+                   ifelse(is_min_length(ou$max_table),  paste0("   MAXTABLE ", ou$max_table, "\n"), ""),
+                   ifelse(is_min_length(ou$day_table),  paste0("   DAYTABLE ", ou$day_table, "\n"), ""),
+                   ifelse(is_min_length(ou$plot_file),  paste0("   PLOTFILE ", ou$plot_file, "\n"), ""))
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
