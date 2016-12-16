@@ -13,9 +13,9 @@
 #
 
 out_tbl <- function(rect_table = "ALLAVE 1ST, 1 1ST",
-                    max_table  = "",
-                    day_table  = "",
-                    plot_file  = ""
+                    max_table  = as.character(NA),
+                    day_table  = as.character(NA),
+                    plot_file  = as.character(NA)
 ) {
 
 df <- tibble::tibble(rect_table = rect_table, 

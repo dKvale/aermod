@@ -4,19 +4,20 @@
 \alias{receptor_tbl}
 \title{Receptor options}
 \usage{
-receptor_tbl(rect_file = "", rou_text = "")
+receptor_tbl(recept_file = as.character(NA),
+  recept_as_text = as.character(NA))
 }
 \arguments{
-\item{rect_file}{Receptor file location.}
+\item{recept_file}{Receptor file location.}
 
-\item{rou_text}{Additional receptor locations as text string. Default is blank.}
+\item{recept_as_text}{Additional receptor locations as text string.}
 }
 \description{
 Create an input table of AERMOD receptor options.
 }
 \examples{
 \dontrun{
-receptor_tbl(rect_file = "..\\\\Receptors\\\\circleReceptors.ROU")
+receptor_tbl(recept_file = "..\\\\Receptors\\\\circleReceptors.ROU")
 }
 }
 \keyword{aermod}

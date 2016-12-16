@@ -8,7 +8,8 @@ source_tbl(source_id = c("SV01"), description = c("boiler1"),
   elevation_m = c(361.33), x_coord = c(461874.9), y_coord = c(4631367),
   type = c("point"), emissions = c(1), emis_units = "g/s",
   height_m = c(10), temp_k = c(600), velocity_ms = c(30),
-  diameter_m = c(2), downwash_file = "", group_id = "")
+  diameter_m = c(2), downwash_file = as.character(NA),
+  group_id = as.character(NA))
 }
 \arguments{
 \item{source_id}{Source ID. For multiple sources use a vector: \code{c("SV01", "SV02")}.}
@@ -44,7 +45,7 @@ For multiple sources use a vector: \code{c("g/s", "lb/hr")}.}
 \item{downwash_file}{Path to downwash parameters for each emission source. For multiple sources use a vector: \code{c("sv01.bpip", "sv02.bpip")}.}
 
 \item{group_id}{Group IDs assigned to source. 
-Separate multiple groups with a comma: \code{"All, SV01, SV01_to_SV03"}.
+To assign multiple groups use a vector: \code{c("ALL", "SV01", "SV01_to_SV03"}.
 If blank, source is assigned to group "All".}
 }
 \description{

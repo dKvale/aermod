@@ -6,9 +6,10 @@
 \usage{
 control_tbl(title = "Demo Energy Station",
   subtitle = "Default Run: Hour, Day, Annual", model_opt = "DFAULT, CONC",
-  avg_time = "1, 24, ANNUAL", urban_opt = "", pollutant_id = "OTHER",
-  flagpole = "", event_file = "", error_file = "", multi_year = "",
-  debug_opt = "")
+  avg_time = "1, 24, ANNUAL", urban_opt = as.character(NA),
+  pollutant_id = "OTHER", flagpole = as.character(NA),
+  event_file = as.character(NA), error_file = as.character(NA),
+  multi_year = as.character(NA), debug_opt = as.character(NA))
 }
 \arguments{
 \item{title}{Title of modeling run. `TITLEONE` of AERMOD input file.}

@@ -157,10 +157,10 @@ read_aermod_inp <- function(file        = "aermod.inp",
   start <- grep("OU STARTING", inp) + 1
   end   <- grep("OU FINISHED", inp) - 1
   
-  df <- read.fwf(textConnection(inp[start:end]), 
-                 widths = c(12, max(nchar(inp[start:end])) - 12), 
-                 header = FALSE, 
-                 stringsAsFactors = FALSE)
+  df <- utils::read.fwf(textConnection(inp[start:end]), 
+                        widths = c(12, max(nchar(inp[start:end])) - 12), 
+                        header = FALSE, 
+                        stringsAsFactors = FALSE)
   
   ou <- out_tbl()
   
@@ -173,18 +173,17 @@ read_aermod_inp <- function(file        = "aermod.inp",
   
   # PROJECTION DETAILS
   if(FALSE) {
-  start <- grep("PROJCTN", inp)
-  end   <- grep("ZONEINX", inp)
+  #start <- grep("PROJCTN", inp)
+  #end   <- grep("ZONEINX", inp)
   
-  if(length(start) > 0 && length(end) > 0 && !is.na(start) && !is.na(end)) {
+  #if(length(start) > 0 && length(end) > 0 && !is.na(start) && !is.na(end)) {
     
-  df <- read.fwf(textConnection(inp[start:end]), 
-                 widths = c(12, max(nchar(inp[start:end])) - 12), 
-                 header = FALSE, 
-                 stringsAsFactors = FALSE)
-  
-  print(df) 
-  }
+  #df <- utils::read.fwf(textConnection(inp[start:end]), 
+  #                      widths = c(12, max(nchar(inp[start:end])) - 12), 
+  #                      header = FALSE, 
+  #                      stringsAsFactors = FALSE)
+  #print(df) 
+  #}
   
   
   #po <- project_tbl()

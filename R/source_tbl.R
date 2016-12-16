@@ -37,13 +37,13 @@ source_tbl <- function(source_id     = c("SV01"),
                        y_coord       = c(4631367),
                        type          = c("point"),
                        emissions     = c(1),
-                       emis_units     = "g/s",
+                       emis_units    = "g/s",
                        height_m      = c(10),
                        temp_k        = c(600),
                        velocity_ms   = c(30),
                        diameter_m    = c(2),
-                       downwash_file = NA,
-                       group_id      = NA
+                       downwash_file = as.character(NA),
+                       group_id      = as.character(NA)
 ) {
   df <- tibble::tibble(source_id     = source_id,
                        description   = description,

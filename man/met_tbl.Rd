@@ -4,10 +4,10 @@
 \alias{met_tbl}
 \title{Meteorology options}
 \usage{
-met_tbl(surf_file = "RSTMPx5Y.SFC",
-  surf_site_info = "14925 2006 ROCHESTER/MUNICIPAL_ARPT",
-  prof_file = "RSTMPx5Y.PFL", prof_site_info = "94983 2006",
-  base_elev_m = 396, start_met = "2009 1 1 1", end_met = "2013 12 31 24")
+met_tbl(surf_file = as.character(NA), surf_site_info = as.character(NA),
+  prof_file = as.character(NA), upper_air_info = as.character(NA),
+  base_elev_m = as.numeric(NA), start_date = as.character(NA),
+  end_date = as.character(NA))
 }
 \arguments{
 \item{surf_file}{Surface met data file location.}
@@ -16,17 +16,17 @@ met_tbl(surf_file = "RSTMPx5Y.SFC",
 
 \item{prof_file}{Profile met data file location.}
 
-\item{prof_site_info}{Optional profile met site description: \code{"Station_no Year City/Name"}.}
+\item{upper_air_info}{Optional upper air site description: \code{"Station_no Year City/Name"}.}
 
 \item{base_elev_m}{Base elevation in meters above mean sea level of temperature profile data.}
 
-\item{start_met}{Start date of meteorology data to be modeled. 
+\item{start_date}{Start date of meteorology data to be modeled. 
 Enter as text: \code{"year month day hour"}
-If blank, set to first entry of \code{surf_file}.}
+If blank, set to the first entry of \code{surf_file}.}
 
-\item{end_met}{End date of meteorology data to be modeled. 
+\item{end_date}{End date of meteorology data to be modeled. 
 Enter as text : \code{"year month day hour"}
-If blank, set to last entry of \code{surf_file}.}
+If blank, set to the last entry of \code{surf_file}.}
 }
 \description{
 Create an input table of AERMOD meteorology options.
@@ -35,10 +35,10 @@ Create an input table of AERMOD meteorology options.
 met_tbl(surf_file      = "..\\\\MET\\\\RSTMPX5Y.SFC",
         surf_site_info = "14925 2006 ROCHESTER/MUNICIPAL_ARPT",
         prof_file      = "..\\\\MET\\\\RSTMPX5Y.PFL",
-        prof_site_info = "94983 2006 ROCHESTER/MUNICIPAL_ARPT",
+        upper_air_info = "94983 2006 ROCHESTER/MUNICIPAL_ARPT",
         base_elev_m    = 396.0,
-        start_met      = "2009 1 1 1",
-        end_met        = "2013 12 31 24")
+        start_date     = "2009 1 1 1",
+        end_date       = "2013 12 31 24")
 }
 \keyword{aermod}
 \keyword{input}

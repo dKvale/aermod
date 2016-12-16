@@ -27,13 +27,13 @@ control_tbl <- function(title         = "Demo Energy Station",
                         subtitle      = "Default Run: Hour, Day, Annual",
                         model_opt     = "DFAULT, CONC",
                         avg_time      = "1, 24, ANNUAL",
-                        urban_opt     = NA,
+                        urban_opt     = as.character(NA),
                         pollutant_id  = "OTHER",
-                        flagpole      = NA,
-                        event_file    = NA,
-                        error_file    = NA,
-                        multi_year    = NA,
-                        debug_opt     = NA
+                        flagpole      = as.character(NA),
+                        event_file    = as.character(NA),
+                        error_file    = as.character(NA),
+                        multi_year    = as.character(NA),
+                        debug_opt     = as.character(NA)
 ) {
  
   df <- tibble::tibble(title         = title, 

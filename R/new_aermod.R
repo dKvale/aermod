@@ -25,14 +25,13 @@
 #' @keywords aermod input new start tables
 #' @export
 #' @examples
-#' master_table <- new_aermod(as_one_df = TRUE)
+#' input_table <- new_aermod(as_one_df = TRUE)
 #' 
 #' new_aermod(as_one_df = FALSE, add_to_envir = TRUE, met = "rochester_met")
 #' 
 #' input_list <- new_aermod(as_one_df = FALSE, met = "rochester_met")
 # 
 #
-
 
 new_aermod <- function(input_table   = "aermod_inp",
                        as_one_df     = TRUE,
@@ -51,7 +50,7 @@ new_aermod <- function(input_table   = "aermod_inp",
                         met_tbl(), 
                         out_tbl())
     
-    if(add_to_envir) assign(table_name, aermod_inp, pos = 1)
+    if(add_to_envir) assign(input_table, aermod_inp, pos = 1)
     
   } else {
     

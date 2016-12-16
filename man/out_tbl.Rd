@@ -4,8 +4,8 @@
 \alias{out_tbl}
 \title{Output options}
 \usage{
-out_tbl(rect_table = "ALLAVE 1ST, 1 1ST", max_table = "", day_table = "",
-  plot_file = "")
+out_tbl(rect_table = "ALLAVE 1ST, 1 1ST", max_table = as.character(NA),
+  day_table = as.character(NA), plot_file = as.character(NA))
 }
 \arguments{
 \item{rect_table}{Output options as text. Separate multiple outputs with a comma: \code{"ALLAVE 1ST, 1 1ST"}}

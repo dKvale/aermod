@@ -2,7 +2,7 @@
 #'
 #' Create an input table of AERMOD receptor options.
 #' @param recept_file Receptor file location.
-#' @param recept_text Additional receptor locations as text string.
+#' @param recept_as_text Additional receptor locations as text string.
 #' @keywords receptors aermod input
 #' @export
 #' @examples
@@ -11,12 +11,12 @@
 #' }
 #
 
-receptor_tbl <- function(recept_file = NA,
-                         recept_text = NA
+receptor_tbl <- function(recept_file    = as.character(NA),
+                         recept_as_text = as.character(NA)
 ) {
   
-  df <- tibble::tibble(recept_file  = recept_file, 
-                       recept_text  = recept_text)
+  df <- tibble::tibble(recept_file     = recept_file, 
+                       recept_as_text  = recept_as_text)
   
   return(df)
 }

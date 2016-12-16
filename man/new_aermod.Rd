@@ -42,7 +42,7 @@ Create default AERMOD input data frames:
 (5) Output options
 }
 \examples{
-master_table <- new_aermod(as_one_df = TRUE)
+input_table <- new_aermod(as_one_df = TRUE)
 
 new_aermod(as_one_df = FALSE, add_to_envir = TRUE, met = "rochester_met")
 
