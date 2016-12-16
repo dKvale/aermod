@@ -27,8 +27,9 @@ write_aermod <- function(data      = data.frame(),
 ) {
 
 # Data tests    
-if(nrow(data) < 1 & nrow(sources) < 1) return("Data frame is empty. AERMOD requires at least 1 emission source")
-
+if((is.null(data) & is.null(sources)) || (nrow(data) < 1 & nrow(sources) < 1)) {
+  return("Data frame is empty. AERMOD requires at least 1 emission source")
+}
   
 # Create temp tables
 if(is.null(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control}
@@ -76,7 +77,6 @@ inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
 #if(!is.na(co$half_life) &  nchar(as.character(co$half_life)) > 0)  {
 #  inp_text <- paste0(inp_text, "   HALFLIFE ", co$half_life, "\n")
 #}
-
 #if(!is.na(co$decay_coef) & nchar(as.character(co$decay_coef)) > 0) {
 #  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
 #} 
@@ -86,7 +86,7 @@ if(!is.null(co$flagpole) & !is.na(co$flagpole) & nchar(as.character(co$flagpole)
 }
 
 inp_text <- paste0(inp_text, 
-                   "   RUNORNOT RUN\n")
+                   "   RUNORNOT RUN\n",
                    section, " FINISHED \n**\n")
  
 
@@ -170,8 +170,7 @@ inp_text <- paste0(inp_text, section, " STARTING \n")
 if(!is.null(re$recept_file) & !is.na(re$recept_file) & nchar(as.character(re$recept_file)) > 0) {
   
    inp_text <- paste0(inp_text, 
-                      "** The receptor file is attached by the INCLUDED statement below.\n")
-
+                      "** The receptor file is attached by the INCLUDED statement below.\n",
                       "   INCLUDED ", re$recept_file, "\n")
 }
 
@@ -192,10 +191,8 @@ section_head <- "Meteorology Pathway"
 
 inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line, "\n")
 
-inp_text <- paste0(inp_text, section, " STARTING \n")
-
-inp_text <- paste0(inp_text, 
-                   
+inp_text <- paste0(inp_text, section, " STARTING \n",
+      
                    "   SURFFILE ", me$surf_file, "\n",
 
                    "   PROFFILE ", me$prof_file, "\n",
@@ -206,13 +203,13 @@ inp_text <- paste0(inp_text,
 
                    "   PROFBASE ", me$base_elev_m, "\n")
 
-if(!is.null(me$start_date) & !is.na(me$start_date)) {
-  inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date, me$end_date) "\n")
+# Check for start and end date
+if(!is.null(me$start_date) & !is.na(me$start_date) & nchar(me$start_date) > 6) {
+  if(!is.null(me$end_date) & !is.na(me$end_date) & nchar(me$end_date) > 6) {
+    
+  inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date, me$end_date), "\n")
+  }
 }
-
-
-# Test AERMOD input file with missing start end dates
-## If error, grab first time of provided surface met data.
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
@@ -227,9 +224,9 @@ inp_text <- paste0(inp_text, comment_line, " ", section_head, "\n", comment_line
 inp_text <- paste0(inp_text, section, " STARTING \n")
 
 inp_text <- paste0(inp_text, 
-                   "   RECTABLE ", ou$rect_table, "\n")
-                   "   MAXTABLE ", ou$max_table, "\n")
-                   "   DAYTABLE ", ou$day_table, "\n")
+                   "   RECTABLE ", ou$rect_table, "\n",
+                   "   MAXTABLE ", ou$max_table, "\n",
+                   "   DAYTABLE ", ou$day_table, "\n",
                    "   PLOTFILE ", ou$plot_file, "\n")
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
