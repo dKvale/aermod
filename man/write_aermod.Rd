@@ -2,7 +2,7 @@
 % Please edit documentation in R/write_aermod.R
 \name{write_aermod}
 \alias{write_aermod}
-\title{Write a data frame to an AERMOD input file.}
+\title{Write a data frame to an AERMOD input file}
 \usage{
 write_aermod(data = NULL, path = NULL, control = NULL, sources = NULL,
   receptors = NULL, met = NULL, out = NULL)

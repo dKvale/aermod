@@ -2,19 +2,20 @@
 #'
 #' Call aermod.exe and run input file
 #' @param input Path to input file.
-#' @param output Filename for model results. Defaults to `title` of input file.
-#' @param exe_folder Folder containing aermod.exe.
-#' @keywords aermod dispersion model EPA
+#' @param out_file File name for saving model output. 
+#'               Defaults to value of \code{title} in the provided input file.
+#' @param exe_folder Folder containing \code{aermod.exe}.
+#' @keywords aermod run dispersion model EPA
 #' @export
 #' @examples
 #' \dontrun{
 #' run_aermod(data       = "aermod.inp", 
-#'            output     = "aermod_results", 
+#'            out_file     = "aermod_results", 
 #'            exe_folder = "aermod_exe")
 #' }
 # 
 run_aermod <- function(input      = "aermod.inp", 
-                       output     = input$title,
+                       out_file     = input$title,
                        exe_folder = "aermod") {
   
  # Check if aermod.exe exists in folder
@@ -34,7 +35,7 @@ run_aermod <- function(input      = "aermod.inp",
   shell(paste(relocate, "& aermod.exe"))
   
   # Copy output file
-  shell(paste0(relocate, ' & COPY aermod.out "', output, '.out"'))
+  shell(paste0(relocate, ' & COPY aermod.out "', out_file, '.out"'))
   
   # Clean house      
   #shell(paste(relocate, "& DEL aermod.inp"))

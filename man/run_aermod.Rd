@@ -4,15 +4,16 @@
 \alias{run_aermod}
 \title{Run AERMOD}
 \usage{
-run_aermod(input = "aermod.inp", output = input$title,
+run_aermod(input = "aermod.inp", out_file = input$title,
   exe_folder = "aermod")
 }
 \arguments{
 \item{input}{Path to input file.}
 
-\item{output}{Filename for model results. Defaults to `title` of input file.}
+\item{out_file}{File name for saving model output. 
+Defaults to value of \code{title} in the provided input file.}
 
-\item{exe_folder}{Folder containing aermod.exe.}
+\item{exe_folder}{Folder containing \code{aermod.exe}.}
 }
 \description{
 Call aermod.exe and run input file
@@ -20,7 +21,7 @@ Call aermod.exe and run input file
 \examples{
 \dontrun{
 run_aermod(data       = "aermod.inp", 
-           output     = "aermod_results", 
+           out_file     = "aermod_results", 
            exe_folder = "aermod_exe")
 }
 }
@@ -28,4 +29,5 @@ run_aermod(data       = "aermod.inp",
 \keyword{aermod}
 \keyword{dispersion}
 \keyword{model}
+\keyword{run}
 

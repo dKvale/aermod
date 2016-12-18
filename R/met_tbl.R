@@ -1,6 +1,6 @@
 #' Meteorology options
 #'
-#' Create an input table of AERMOD meteorology options.
+#' Create a data frame of AERMOD meteorology options.
 #' @param surf_file Surface met data file location.
 #' @param surf_site_info Optional surface met site description: \code{"Station_no Year City/Name"}.
 #' @param prof_file Profile met data file location.

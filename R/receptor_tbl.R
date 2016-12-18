@@ -1,6 +1,6 @@
 #' Receptor options
 #'
-#' Create an input table of AERMOD receptor options.
+#' Create a data frame of AERMOD receptor options.
 #' @param recept_file Receptor file location.
 #' @param recept_as_text Additional receptor locations as text string.
 #' @keywords receptors aermod input

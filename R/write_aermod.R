@@ -1,4 +1,4 @@
-#' Write a data frame to an AERMOD input file.
+#' Write a data frame to an AERMOD input file
 #'
 #' Output an AERMOD input file from a data frame of AERMOD parameters.
 #' @param data Data frame of AERMOD modeling parameters.
@@ -17,7 +17,6 @@
 #' write_aermod(data = aermod_inp, path = "aermod.inp")
 # 
 # 
-
 write_aermod <- function(data      = NULL, 
                          path      = NULL,
                          control   = NULL,
@@ -29,7 +28,7 @@ write_aermod <- function(data      = NULL,
 
 # Data tests    
 if((is.null(data) || nrow(data) < 1) & (is.null(sources) || nrow(sources) < 1)) {
-  return("Data frame is empty. AERMOD requires at least 1 emission source.")
+  stop("Data frame is empty. AERMOD requires at least 1 emission source.")
 }
   
 ## Use pathway specific tables if provided
@@ -146,7 +145,7 @@ inp_text <- paste0(inp_text,
 
 inp_text <- paste0(inp_text, paste0("   SRCPARAM ", 
                    receptors::fw(so$source_id,   13),
-                   receptors::fw(so$emissions,   5),
+                   receptors::fw(so$emit_gs,   5),
                    receptors::fw(so$height_m,    9),
                    receptors::fw(so$temp_k,      9),
                    receptors::fw(so$velocity_ms, 10),
@@ -234,6 +233,8 @@ inp_text <- paste0(inp_text,
                    ifelse(is_min_length(ou$rect_table), paste0("   RECTABLE ", ou$rect_table, "\n"), ""),
                    ifelse(is_min_length(ou$max_table),  paste0("   MAXTABLE ", ou$max_table, "\n"), ""),
                    ifelse(is_min_length(ou$day_table),  paste0("   DAYTABLE ", ou$day_table, "\n"), ""),
+                   ifelse(is_min_length(ou$file_form),  paste0("   FILEFORM ", ou$file_form, "\n"), ""),
+                   ifelse(is_min_length(ou$rank_file),  paste0("   RANKFILE ", ou$rank_file, "\n"), ""),
                    ifelse(is_min_length(ou$plot_file),  paste0("   PLOTFILE ", ou$plot_file, "\n"), ""))
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")

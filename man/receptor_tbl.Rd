@@ -13,7 +13,7 @@ receptor_tbl(recept_file = as.character(NA),
 \item{recept_as_text}{Additional receptor locations as text string.}
 }
 \description{
-Create an input table of AERMOD receptor options.
+Create a data frame of AERMOD receptor options.
 }
 \examples{
 \dontrun{

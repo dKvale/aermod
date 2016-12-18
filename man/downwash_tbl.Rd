@@ -4,17 +4,17 @@
 \alias{downwash_tbl}
 \title{Downwash options}
 \usage{
-downwash_tbl(STACK = "STK_1", BUILDHGTS = "", BUILDWIDS = "",
-  BUILDLENS = "", XBADJ = "", YBADJ = "")
+downwash_tbl(source_id = NULL, build_heights = NULL, build_widths = NULL,
+  build_lengths = NULL, x_badj = NULL, y_badj = NULL)
 }
 \arguments{
-\item{STACK}{Stack names. Separate multiple sources with commas.}
+\item{source_id}{Emission source ID or name.}
 }
 \description{
-Create an input table of AERMOD downwash options.
+Create a data frame of AERMOD downwash options.
 }
 \examples{
-downwash_tbl(STACK = "STK_1")
+downwash_tbl(source_id = "STK_1")
 }
 \keyword{aermod}
 \keyword{building}

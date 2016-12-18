@@ -29,7 +29,7 @@ Enter as text : \code{"year month day hour"}
 If blank, set to the last entry of \code{surf_file}.}
 }
 \description{
-Create an input table of AERMOD meteorology options.
+Create a data frame of AERMOD meteorology options.
 }
 \examples{
 met_tbl(surf_file      = "..\\\\MET\\\\RSTMPX5Y.SFC",

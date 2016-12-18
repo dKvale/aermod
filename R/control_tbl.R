@@ -1,6 +1,6 @@
 #' Control options
 #'
-#' Create an input table of AERMOD control options.
+#' Create a data frame of AERMOD control options.
 #' @param title Title of modeling run. `TITLEONE` of AERMOD input file.
 #' @param subtitle Subtitle of modeling run. `TITLETWO` of AERMOD input file.
 #' @param model_opt Model run options. 

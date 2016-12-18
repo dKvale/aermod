@@ -4,23 +4,28 @@
 \alias{out_tbl}
 \title{Output options}
 \usage{
-out_tbl(rect_table = "ALLAVE 1ST, 1 1ST", max_table = as.character(NA),
-  day_table = as.character(NA), plot_file = as.character(NA))
+out_tbl(rect_table = c("ALLAVE 1ST", "1 1ST"), max_table = as.character(NA),
+  day_table = as.character(NA), file_form = as.character(NA),
+  rank_file = as.character(NA), plot_file = as.character(NA))
 }
 \arguments{
-\item{rect_table}{Output options as text. Separate multiple outputs with a comma: \code{"ALLAVE 1ST, 1 1ST"}}
+\item{rect_table}{Output options as text. Enter multiple options as a vector: \code{c("ALLAVE 1ST", "1 1ST")}}
 
 \item{max_table}{Output options as text.}
 
 \item{day_table}{Output options as text.}
 
+\item{rank_file}{Output options as text.}
+
 \item{plot_file}{Output options as text.}
+
+\item{file_from}{Output options as text.}
 }
 \description{
-Create an input table of AERMOD output options.
+Create a data frame of AERMOD output options.
 }
 \examples{
-out_tbl(rect_table = "ALLAVE 1ST, 1 1ST 8TH")
+out_tbl(rect_table = c("ALLAVE 1ST", "1 1ST 8TH"))
 }
 \keyword{aermod}
 \keyword{output}

@@ -39,7 +39,7 @@ Use for identifying the highest annual value across multiple years of met data.}
 \item{debug_opt}{Automatic debugging options performed by AERMOD.}
 }
 \description{
-Create an input table of AERMOD control options.
+Create a data frame of AERMOD control options.
 }
 \examples{
 control_tbl(title = "My New Space Station")
