@@ -6,7 +6,7 @@
 #' (3) Receptor parameters
 #' (4) Meteorology options
 #' (5) Output options
-#' @param input_df Name for the joined input data frame added to Global Environment. 
+#' @param aermod Name of AERMOD input data frame added to Global Environment. 
 #'                 Default is "aermod_inp". Ignored if \code{as_one_df} is \code{FALSE}. 
 #' @param as_one_df \code{TRUE} or \code{FALSE}. 
 #'                    Return all inputs in a single wide data frame. 
@@ -31,14 +31,14 @@
 #' @keywords aermod input new start tables
 #' @export
 #' @examples
-#' input_df <- new_aermod(as_one_df = TRUE)
+#' aermod <- new_aermod(as_one_df = TRUE)
 #' 
 #' new_aermod(as_one_df = FALSE, add_to_envir = TRUE, met = "rochester_met")
 #' 
 #' input_list <- new_aermod(as_one_df = FALSE, met = "rochester_met")
 # 
 #
-new_aermod <- function(input_df      = "aermod_inp",
+new_aermod <- function(aermod        = "aermod_inp",
                        as_one_df     = TRUE,
                        add_to_envir  = FALSE,
                        control       = "control",
@@ -59,7 +59,7 @@ new_aermod <- function(input_df      = "aermod_inp",
   
     aermod_inp <- tibble::as_data_frame(cbind(co, so, re, me, ou)) 
     
-    if(add_to_envir) assign(input_df, aermod_inp, pos = 1)
+    if(add_to_envir) assign(aermod, aermod_inp, pos = 1)
     
   } else {
     

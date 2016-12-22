@@ -4,12 +4,12 @@
 \alias{new_aermod}
 \title{Create AERMOD input tables}
 \usage{
-new_aermod(input_df = "aermod_inp", as_one_df = TRUE,
-  add_to_envir = FALSE, control = "control", sources = "sources",
-  receptors = "receptors", met = "met", out = "out")
+new_aermod(aermod = "aermod_inp", as_one_df = TRUE, add_to_envir = FALSE,
+  control = "control", sources = "sources", receptors = "receptors",
+  met = "met", out = "out")
 }
 \arguments{
-\item{input_df}{Name for the joined input data frame added to Global Environment. 
+\item{aermod}{Name of AERMOD input data frame added to Global Environment. 
 Default is "aermod_inp". Ignored if \code{as_one_df} is \code{FALSE}.}
 
 \item{as_one_df}{\code{TRUE} or \code{FALSE}. 
@@ -48,7 +48,7 @@ Create default AERMOD input data frames:
 (5) Output options
 }
 \examples{
-input_df <- new_aermod(as_one_df = TRUE)
+aermod <- new_aermod(as_one_df = TRUE)
 
 new_aermod(as_one_df = FALSE, add_to_envir = TRUE, met = "rochester_met")
 
