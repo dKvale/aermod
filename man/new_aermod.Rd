@@ -4,9 +4,9 @@
 \alias{new_aermod}
 \title{Create AERMOD input tables}
 \usage{
-new_aermod(input_df = "aermod_inp", as_one_df = TRUE, control = "control",
-  sources = "sources", receptors = "receptors", met = "met",
-  out = "out", add_to_envir = FALSE)
+new_aermod(input_df = "aermod_inp", as_one_df = TRUE,
+  add_to_envir = FALSE, control = "control", sources = "sources",
+  receptors = "receptors", met = "met", out = "out")
 }
 \arguments{
 \item{input_df}{Name for the joined input data frame added to Global Environment. 
@@ -20,6 +20,9 @@ If \code{FALSE}, return 5 data frames in a list:
      (3) receptors
      (4) meteorology
      (5) output}
+
+\item{add_to_envir}{\code{TRUE} or \code{FALSE}. 
+Exports tables directly to the Global Environment.}
 
 \item{control}{Name for control options data frame added to Global Environment. 
 Default is "control". Ignored if \code{as_one_df} is \code{TRUE}.}
@@ -35,9 +38,6 @@ Default is "met". Ignored if \code{as_one_df} is \code{TRUE}.}
 
 \item{out}{Name for output options data frame added to Global Environment. 
 Default is "output". Ignored if \code{as_one_df} is \code{TRUE}.}
-
-\item{add_to_envir}{\code{TRUE} or \code{FALSE}. 
-Exports tables directly to the Global Environment.}
 }
 \description{
 Create default AERMOD input data frames: 

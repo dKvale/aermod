@@ -35,7 +35,7 @@ read_aermod_inp <- function(file,
                         header = FALSE, 
                         stringsAsFactors = FALSE)
   
-  co <- control_tbl()
+  co <- control_df()
   
   co$title_one <- df[1, 2]
   co$title_two <- df[2, 2]
@@ -55,7 +55,7 @@ read_aermod_inp <- function(file,
 
   df <- utils:: read.csv(textConnection(df), header = FALSE, stringsAsFactors = FALSE)
   
-  so <- source_tbl(source_id   = df[ , 3],
+  so <- source_df(source_id   = df[ , 3],
                    type        = df[ , 4],
                    x_coord     = df[ , 5],
                    y_coord     = df[ , 6],
@@ -126,7 +126,7 @@ read_aermod_inp <- function(file,
   start <- grep("RE STARTING", inp)[1] + 1
   end   <- max(grep("RE FINISHED", inp)) - 1
   
-  re <- receptor_tbl()
+  re <- receptor_df()
   
   re$rect_file <- substring(inp[start:end][grep("INCLUDED", inp[start:end])], 13)
      
@@ -141,7 +141,7 @@ read_aermod_inp <- function(file,
                         header = FALSE, 
                         stringsAsFactors = FALSE)
   
-  me <- met_tbl()
+  me <- met_df()
   
   me$surf_file      <- df[1, 2]
   me$prof_file      <- df[2, 2]
@@ -162,7 +162,7 @@ read_aermod_inp <- function(file,
                         header = FALSE, 
                         stringsAsFactors = FALSE)
   
-  ou <- out_tbl()
+  ou <- out_df()
   
   if(grepl("RECTABLE", df$V1)) ou$rect_table <- subset(df, V1 == "   RECTABLE ")$V2
   if(grepl("MAXTABLE", df$V1)) ou$max_table  <- subset(df, V1 == "   MAXTABLE ")$V2
@@ -186,7 +186,7 @@ read_aermod_inp <- function(file,
   #}
   
   
-  #po <- project_tbl()
+  #po <- project_df()
   
   #po$projection  <- df[1, 2]
   #po$description <- df[2, 2]

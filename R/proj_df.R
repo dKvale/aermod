@@ -7,16 +7,16 @@
 #' @keywords projection options aermod output
 #' @export
 #' @examples
-#' proj_tbl(projection  = "Coordinate System UTM")
+#' proj_df(projection  = "Coordinate System UTM")
 #
 
-proj_tbl <- function(projection  = "Coordinate System UTM",
-                     description = "UTM: Universal Transverse Mercator",
-                     datum       = "North American datum 1983",
-                     dtmrgn      = "conus",
-                     units       = "m",
-                     zone        = "15", 
-                     zone_inx     = "0"
+proj_df <- function(projection  = "Coordinate System UTM",
+                    description = "UTM: Universal Transverse Mercator",
+                    datum       = "North American datum 1983",
+                    dtmrgn      = "conus",
+                    units       = "m",
+                    zone        = "15", 
+                    zone_inx     = "0"
 ) {
   
   df <- tibble::tibble(projection   = projection,

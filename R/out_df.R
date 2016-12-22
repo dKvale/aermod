@@ -10,16 +10,16 @@
 #' @keywords output aermod 
 #' @export
 #' @examples
-#' out_tbl(rect_table = c("ALLAVE 1ST", "1 1ST 8TH"))
+#' out_df(rect_table = c("ALLAVE 1ST", "1 1ST 8TH"))
 # 
 #
 
-out_tbl <- function(rect_table = c("ALLAVE 1ST", "1 1ST"),
-                    max_table  = as.character(NA),
-                    day_table  = as.character(NA),
-                    file_form  = as.character(NA),
-                    rank_file  = as.character(NA),
-                    plot_file  = as.character(NA)
+out_df <- function(rect_table = c("ALLAVE 1ST", "1 1ST"),
+                   max_table  = as.character(NA),
+                   day_table  = as.character(NA),
+                   file_form  = as.character(NA),
+                   rank_file  = as.character(NA),
+                   plot_file  = as.character(NA)
 ) {
 
 df <- tibble::tibble(rect_table = list(rect_table), 

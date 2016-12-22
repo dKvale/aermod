@@ -15,7 +15,7 @@
 #' @keywords meteorology weather surface aermod input
 #' @export
 #' @examples
-#' met_tbl(surf_file      = "..\\MET\\RSTMPX5Y.SFC",
+#' met_df(surf_file      = "..\\MET\\RSTMPX5Y.SFC",
 #'         surf_site_info = "14925 2006 ROCHESTER/MUNICIPAL_ARPT",
 #'         prof_file      = "..\\MET\\RSTMPX5Y.PFL",
 #'         upper_air_info = "94983 2006 ROCHESTER/MUNICIPAL_ARPT",
@@ -25,13 +25,13 @@
 # 
 #
 
-met_tbl <- function(surf_file      = as.character(NA),
-                    surf_site_info = as.character(NA),
-                    prof_file      = as.character(NA),
-                    upper_air_info = as.character(NA),
-                    base_elev_m    = as.numeric(NA),
-                    start_date     = as.character(NA),
-                    end_date       = as.character(NA)
+met_df <- function(surf_file      = as.character(NA),
+                   surf_site_info = as.character(NA),
+                   prof_file      = as.character(NA),
+                   upper_air_info = as.character(NA),
+                   base_elev_m    = as.numeric(NA),
+                   start_date     = as.character(NA),
+                   end_date       = as.character(NA)
 ) {
   
   # Find start_date if only end_date provided

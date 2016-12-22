@@ -49,7 +49,7 @@ read_aermod_out <- function(file) {
     
     df$group_id    <- strsplit(strsplit(out[line], "GROUP:[[:space:]]+")[[1]][2], "[[:space:]]+[***]")[[1]][1]
     
-    # Make tibble
+    # Force to tibble for storing lists
     df <- tibble::as_data_frame(df)
     
     # Source IDs

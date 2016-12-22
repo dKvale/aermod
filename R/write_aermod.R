@@ -55,6 +55,17 @@ me[is.na(me)] <- ""
 ou[is.na(ou)] <- ""  
 
 
+# Check if urban population at least 100
+if(!is_valid(so$urban_pop, 1)) so$urban_pop <- NA
+
+if(is_valid(so$urban_pop, 1) && min(so$urban_pop, na.rm = TRUE) < 100) {
+  
+  so$urban_pop <- sapply(so$urban_pop, function(x) ifelse(is_valid(x, 1) && x < 100, NA, x))
+                      
+  warning("A source is assigned an 'urban_pop' value below 100, the source will be modeled using rural dispersion coefficients.")
+}
+
+
 # Create text file
 
 ## Header
@@ -74,16 +85,6 @@ new_section  <- function(section_code   = section,
            section_code, " STARTING \n")
   }
 
-## Test length function
-is_min_length <- function(x, length = 1) {
-  
-  if(is.null(x) || is.na(x)) return(FALSE) 
-  
-  if(is.character(x)) return(nchar(x) >= length)
-  
-  if(is.data.frame(x)) return(nrow(x) >= length)
-}
-
 ## Control pathway ##
 section <- "CO"
 section_head <- "Control pathway"
@@ -98,8 +99,15 @@ inp_text <- paste0(inp_text,
                    "   MODELOPT ", paste(co$model_opt[[1]], collapse = " "), "\n",
                    "   AVERTIME ", paste(co$avg_time[[1]], collapse = " "), "\n")
 
-if(is_min_length(co$urban_opt[[1]], 1)) {
-  inp_text <- paste0(inp_text, "   URBANOPT ", paste(co$urban_opt[[1]], collapse = " "), "\n")
+if(is_valid(so$urban_pop, 1)) {
+  
+  inp_text <- paste0(inp_text,
+                     paste0("   URBANOPT ",
+                            if(length(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))]) > 1) { 
+                                   receptors::fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7)
+                              } else "",
+                            so$urban_pop[sapply(so$urban_pop, function(x) is_valid(x))], 
+                            collapse = "\n"), "\n")
 }
 
 inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
@@ -111,7 +119,7 @@ inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
 #  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
 #} 
 
-if(is_min_length(co$flagpole, 1)) {
+if(is_valid(co$flagpole, 1)) {
   inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
 }
 
@@ -152,7 +160,7 @@ inp_text <- paste0(inp_text, paste0("   SRCPARAM ",
                    so$diameter_m, "\n",
                    collapse = ""))
 
-if(is_min_length(so$downwash_file[1], 1)) {
+if(is_valid(so$downwash_file[1], 1)) {
   
   inp_text <- paste0(inp_text, "\n** Building Downwash **\n",
                      "** The building downwash file is attached by the INCLUDED statement below.\n")
@@ -161,6 +169,17 @@ if(is_min_length(so$downwash_file[1], 1)) {
 }
 
 inp_text <- paste0(inp_text, "\n** Source groups defined\n")
+
+if(is_valid(so$urban_pop, 1)) {
+  
+  inp_text <- paste0(inp_text,
+                     paste0("   URBANSRC ",
+                            if(length(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))]) > 1) { 
+                              receptors::fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7)
+                            } else "",
+                            receptors::fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7),
+                           collapse = "\n"), "\n")
+}
 
 # Split multiple group_ids
 if(is.list(so$group_id)) so <- tidyr::unnest(so[ , c("source_id", "group_id")])
@@ -184,14 +203,14 @@ section_head <- "Receptor pathway"
 
 inp_text <- paste0(inp_text, new_section())
 
-if(is_min_length(re$recept_file, 1)) {
+if(is_valid(re$recept_file, 1)) {
   
    inp_text <- paste0(inp_text, 
                       "** The receptor file is attached by the INCLUDED statement below.\n",
                       "   INCLUDED ", re$recept_file, "\n")
 }
 
-if(is_min_length(re$recept_as_text, 1)) {
+if(is_valid(re$recept_as_text, 1)) {
   
   inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n",
                      re$recept_as_text, "\n")
@@ -214,8 +233,8 @@ inp_text <- paste0(inp_text,
                    "   PROFBASE ", me$base_elev_m, "\n")
 
 # Check for start and end date
-if(is_min_length(me$start_date, 6)) {
-  if(is_min_length(me$end_date, 6)) {
+if(is_valid(me$start_date, 6)) {
+  if(is_valid(me$end_date, 6)) {
     inp_text <- paste0(inp_text, "   STARTEND ", paste(me$start_date, me$end_date), "\n")
   }
 }
@@ -230,12 +249,12 @@ section_head <- "Output Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   ifelse(is_min_length(ou$rect_table), paste0("   RECTABLE ", ou$rect_table, "\n"), ""),
-                   ifelse(is_min_length(ou$max_table),  paste0("   MAXTABLE ", ou$max_table, "\n"), ""),
-                   ifelse(is_min_length(ou$day_table),  paste0("   DAYTABLE ", ou$day_table, "\n"), ""),
-                   ifelse(is_min_length(ou$file_form),  paste0("   FILEFORM ", ou$file_form, "\n"), ""),
-                   ifelse(is_min_length(ou$rank_file),  paste0("   RANKFILE ", ou$rank_file, "\n"), ""),
-                   ifelse(is_min_length(ou$plot_file),  paste0("   PLOTFILE ", ou$plot_file, "\n"), ""))
+                   ifelse(is_valid(ou$rect_table), paste0("   RECTABLE ", ou$rect_table, "\n"), ""),
+                   ifelse(is_valid(ou$max_table),  paste0("   MAXTABLE ", ou$max_table, "\n"), ""),
+                   ifelse(is_valid(ou$day_table),  paste0("   DAYTABLE ", ou$day_table, "\n"), ""),
+                   ifelse(is_valid(ou$file_form),  paste0("   FILEFORM ", ou$file_form, "\n"), ""),
+                   ifelse(is_valid(ou$rank_file),  paste0("   RANKFILE ", ou$rank_file, "\n"), ""),
+                   ifelse(is_valid(ou$plot_file),  paste0("   PLOTFILE ", ou$plot_file, "\n"), ""))
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
@@ -244,7 +263,7 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 cat("\nGenerated input file: \n\n")
 invisible(writeLines(inp_text))
   
-if(!is_min_length(path)) {
+if(!is_valid(path)) {
   
   return(inp_text)
   

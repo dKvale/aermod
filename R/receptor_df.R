@@ -7,12 +7,12 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' receptor_tbl(recept_file = "..\\Receptors\\circleReceptors.ROU")
+#' receptor_df(recept_file = "..\\Receptors\\circleReceptors.ROU")
 #' }
 #
 
-receptor_tbl <- function(recept_file    = as.character(NA),
-                         recept_as_text = as.character(NA)
+receptor_df <- function(recept_file    = as.character(NA),
+                        recept_as_text = as.character(NA)
 ) {
   
   df <- tibble::tibble(recept_file     = recept_file, 

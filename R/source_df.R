@@ -14,41 +14,45 @@
 #' @param velocity_ms Exit velocity of air emissions in in \code{m/s}. 
 #' @param diameter_m Internal diameter of stack in \code{meters}.
 #' @param downwash_file Path to downwash parameters for each emission source.
+#' @param urban_pop Urban population for source. Requires a value of at least \code{100}.  
+#'                  If blank or a value less than \code{100}, source is modeled with default \code{rural} dispersion coefficients. 
 #' @param group_id Group IDs assigned to source. 
 #'                 To assign a source to multiple groups use a vector: \code{c("ALL", "SV01", "SV01_to_SV03"}.
 #'                 If blank, source is assigned to group "All".
 #' @keywords source aermod input
 #' @export
 #' @examples
-#' source_tbl(source_id     = c("SV01"),
-#'            description   = c("boiler1"),
-#'            elevation_m   = c(361.33),
-#'            x_coord       = c(461874.9),
-#'            y_coord       = c(4631367),
-#'            type          = c("point"),
-#'            emit_gs       = c(1),
-#'            height_m      = c(10),
-#'            temp_k        = c(600),
-#'            velocity_ms   = c(30),
-#'            diameter_m    = c(2),
-#'            downwash_file = as.character(NA),
-#'            group_id      = as.character(NA))
+#' source_df(source_id     = c("SV01"),
+#'           description   = c("boiler1"),
+#'           elevation_m   = c(361.33),
+#'           x_coord       = c(461874.9),
+#'           y_coord       = c(4631367),
+#'           type          = c("point"),
+#'           emit_gs       = c(1),
+#'           height_m      = c(10),
+#'           temp_k        = c(600),
+#'           velocity_ms   = c(30),
+#'           diameter_m    = c(2),
+#'           downwash_file = as.character(NA),
+#'           urban_pop     = 60000,
+#'           group_id      = as.character(NA))
 # 
 # 
 
-source_tbl <- function(source_id     = as.character(NA),
-                       description   = as.character(NA),
-                       elevation_m   = as.numeric(NA),
-                       x_coord       = as.numeric(NA),
-                       y_coord       = as.numeric(NA),
-                       type          = c("point"),
-                       emit_gs       = as.numeric(NA),
-                       height_m      = as.numeric(NA),
-                       temp_k        = as.numeric(NA),
-                       velocity_ms   = as.numeric(NA),
-                       diameter_m    = as.numeric(NA),
-                       downwash_file = as.character(NA),
-                       group_id      = as.character(NA)
+source_df <- function(source_id     = as.character(NA),
+                      description   = as.character(NA),
+                      elevation_m   = as.numeric(NA),
+                      x_coord       = as.numeric(NA),
+                      y_coord       = as.numeric(NA),
+                      type          = c("point"),
+                      emit_gs       = as.numeric(NA),
+                      height_m      = as.numeric(NA),
+                      temp_k        = as.numeric(NA),
+                      velocity_ms   = as.numeric(NA),
+                      diameter_m    = as.numeric(NA),
+                      downwash_file = as.character(NA),
+                      urban_pop     = as.numeric(NA),
+                      group_id      = as.character(NA)
 ) {
   df <- tibble::tibble(source_id     = source_id,
                        description   = description,
@@ -62,6 +66,7 @@ source_tbl <- function(source_id     = as.character(NA),
                        velocity_ms   = velocity_ms,
                        diameter_m    = diameter_m,
                        downwash_file = downwash_file,
+                       urban_pop     = urban_pop,
                        group_id      = ifelse(is.null(group_id) || is.na(group_id) || nchar(group_id) < 1, list("ALL"), list(group_id)))
   return(df)
  

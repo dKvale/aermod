@@ -21,7 +21,7 @@ Call aermod.exe and run input file
 \examples{
 \dontrun{
 run_aermod(data       = "aermod.inp", 
-           out_file     = "aermod_results", 
+           out_file   = "aermod_results", 
            exe_folder = "aermod_exe")
 }
 }
