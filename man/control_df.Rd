@@ -4,12 +4,11 @@
 \alias{control_df}
 \title{Control options}
 \usage{
-control_df(title = "Demo Energy Station",
-  subtitle = "Default Run: Hour, Day, Annual", model_opt = c("DFAULT",
-  "CONC"), avg_time = c("1", "24", "ANNUAL"), pollutant_id = "OTHER",
-  flagpole = as.character(NA), event_file = as.character(NA),
-  error_file = as.character(NA), multi_year = as.character(NA),
-  debug_opt = as.character(NA))
+control_df(title = as.character(NA), subtitle = as.character(NA),
+  model_opt = c("DFAULT", "CONC"), avg_time = c("1", "24", "ANNUAL"),
+  pollutant_id = "OTHER", flagpole = as.character(NA),
+  event_file = as.character(NA), error_file = as.character(NA),
+  multi_year = as.character(NA), debug_opt = as.character(NA))
 }
 \arguments{
 \item{title}{Title of modeling run. `TITLEONE` of AERMOD input file.}
@@ -40,7 +39,11 @@ Use for identifying the highest annual value across multiple years of met data.}
 Create a data frame of AERMOD control options.
 }
 \examples{
-control_df(title = "My New Space Station")
+control_df(title         = "Demo Energy Station",
+           subtitle      = "Default Run: Hour, Day, Annual",
+           model_opt     = c("DFAULT", "CONC"),
+           avg_time      = c("1", "ANNUAL"),
+           pollutant_id  = "NO2")
 
 }
 \keyword{aermod}

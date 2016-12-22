@@ -18,12 +18,16 @@
 #' @keywords control options aermod input
 #' @export
 #' @examples
-#' control_df(title = "My New Space Station")
+#' control_df(title         = "Demo Energy Station",
+#'            subtitle      = "Default Run: Hour, Day, Annual",
+#'            model_opt     = c("DFAULT", "CONC"),
+#'            avg_time      = c("1", "ANNUAL"),
+#'            pollutant_id  = "NO2")
 #'
 #
 
-control_df <- function(title         = "Demo Energy Station",
-                       subtitle      = "Default Run: Hour, Day, Annual",
+control_df <- function(title         = as.character(NA),
+                       subtitle      = as.character(NA),
                        model_opt     = c("DFAULT", "CONC"),
                        avg_time      = c("1", "24", "ANNUAL"),
                        pollutant_id  = "OTHER",
