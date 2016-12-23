@@ -249,12 +249,24 @@ section_head <- "Output Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   ifelse(is_valid(ou$rect_table), paste0("   RECTABLE ", ou$rect_table, "\n"), ""),
-                   ifelse(is_valid(ou$max_table),  paste0("   MAXTABLE ", ou$max_table, "\n"), ""),
-                   ifelse(is_valid(ou$day_table),  paste0("   DAYTABLE ", ou$day_table, "\n"), ""),
-                   ifelse(is_valid(ou$file_form),  paste0("   FILEFORM ", ou$file_form, "\n"), ""),
-                   ifelse(is_valid(ou$rank_file),  paste0("   RANKFILE ", ou$rank_file, "\n"), ""),
-                   ifelse(is_valid(ou$plot_file),  paste0("   PLOTFILE ", ou$plot_file, "\n"), ""))
+                   ifelse(is_valid(ou$rect_table), 
+                          paste0("   RECTABLE ", paste(ou$rect_table[[1]], collapse = " "), "\n"),
+                          ""),
+                   ifelse(is_valid(ou$max_table),  
+                          paste0("   MAXTABLE ", paste(ou$max_table[[1]], collapse = " "), "\n"),
+                          ""),
+                   ifelse(is_valid(ou$day_table),  
+                          paste0("   DAYTABLE ", paste(ou$day_table[[1]], collapse = " "), "\n"),
+                          ""),
+                   ifelse(is_valid(ou$file_form),  
+                          paste0("   FILEFORM ", paste(ou$file_form[[1]], collapse = " "), "\n"),
+                          ""),
+                   ifelse(is_valid(ou$rank_file),  
+                          paste0("   RANKFILE ", paste(ou$rank_file[[1]], collapse = " "), "\n"), 
+                          ""),
+                   ifelse(is_valid(ou$plot_file),  
+                          paste0("   PLOTFILE ", paste(ou$plot_file[[1]], collapse = " "), "\n"),
+                          ""))
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
@@ -267,7 +279,7 @@ if(!is_valid(path)) {
   
   return(inp_text)
   
-} else  writeLines(inp_text, path)
+} else  writeLines(inp_text, file(path))
   
 }
 
