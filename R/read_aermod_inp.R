@@ -168,35 +168,6 @@ read_aermod_inp <- function(file,
   if(grepl("DAYTABLE", df$V1)) ou$day_table  <- subset(df, V1 == "   DAYTABLE ")$V2
   if(grepl("PLOTFILE", df$V1)) ou$plot_file  <- subset(df, V1 == "   PLOTFILE ")$V2
     
-  #inp <- inp[(end+2):length(inp)]
-  
-  # PROJECTION DETAILS
-  if(FALSE) {
-  #start <- grep("PROJCTN", inp)
-  #end   <- grep("ZONEINX", inp)
-  
-  #if(length(start) > 0 && length(end) > 0 && !is.na(start) && !is.na(end)) {
-    
-  #df <- utils::read.fwf(textConnection(inp[start:end]), 
-  #                      widths = c(12, max(nchar(inp[start:end])) - 12), 
-  #                      header = FALSE, 
-  #                      stringsAsFactors = FALSE)
-  #print(df) 
-  #}
-  
-  
-  #po <- project_df()
-  
-  #po$projection  <- df[1, 2]
-  #po$description <- df[2, 2]
-  #po$datum       <- df[3, 2]
-  #po$dtmrgn      <- df[4, 2]
-  #po$units       <- df[5, 2]
-  #po$zone        <- df[6, 2]
-  #po$zone_inx    <- df[7, 2]
-  }
-  
-  
   # COMBINE input tables
   if(as_one_df) {
     aermod_inp <- cbind(co, so, re, me, ou)
