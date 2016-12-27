@@ -15,15 +15,15 @@
 #' }
 # 
 run_aermod <- function(input      = "aermod.inp", 
-                       out_file     = input$title,
+                       out_file   = "aermod.out",
                        exe_folder = "aermod") {
   
  # Check if aermod.exe exists in folder
   is_aermod <- "aermod.exe" %in% tolower(list.files(exe_folder))
   
   if(!is_aermod) {
-    warning("aermod.exe was not found in ", exe_folder)
-    stop()
+    stop("aermod.exe not found in ", exe_folder)
+    
   }
   
   # Copy input file to folder

@@ -10,7 +10,7 @@
 #'                         (3) receptors
 #'                         (4) meteorology
 #'                         (5) output
-#' @keywords read aermod input
+#' @keywords read load aermod input
 #' @export
 #' @importFrom magrittr "%>%"
 #' @examples
@@ -18,7 +18,6 @@
 #' read_aermod_inp(file = "aermod.inp")
 #' }
 #
-
 read_aermod_inp <- function(file, 
                             as_one_df   = TRUE) {
   
@@ -71,7 +70,7 @@ read_aermod_inp <- function(file,
   df <- gsub("[[:space:]]+", ",", inp[start:end])
   
   df <- utils::read.csv(textConnection(df), header = FALSE, stringsAsFactors = FALSE)
-  as_one_df
+  
   so$emissions   <- df[ , 4]
   so$height_m    <- df[ , 5]
   so$temp_k      <- df[ , 6]

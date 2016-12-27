@@ -91,9 +91,9 @@ section_head <- "Control pathway"
     
 inp_text <- paste0(inp_text, new_section())
 
-inp_text <- paste0(inp_text, "   TITLEONE ", co$title, "\n")
+if(is_valid(co$title, 1)) inp_text <- paste0(inp_text, "   TITLEONE ", co$title, "\n")
 
-inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
+if(is_valid(co$subtitle, 1)) inp_text <- paste0(inp_text, "   TITLETWO ", co$subtitle, "\n")
 
 inp_text <- paste0(inp_text, 
                    "   MODELOPT ", paste(co$model_opt[[1]], collapse = " "), "\n",
@@ -119,9 +119,8 @@ inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
 #  inp_text <- paste0(inp_text, "   DCAYCOEF ", co$decay_coef, "\n")
 #} 
 
-if(is_valid(co$flagpole, 1)) {
-  inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
-}
+if(is_valid(co$flagpole, 1)) inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
+
 
 inp_text <- paste0(inp_text, 
                    "   RUNORNOT RUN\n",
@@ -272,14 +271,21 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
 # Return results
-cat("\nGenerated input file: \n\n")
-invisible(writeLines(inp_text))
+#cat("\nGenerated input file: \n\n")
+#invisible(writeLines(inp_text))
   
 if(!is_valid(path)) {
   
   return(inp_text)
   
-} else  writeLines(inp_text, file(path))
+} else  {
+  
+  con <- file(path)
+  
+  writeLines(inp_text, con)
+  
+  close(con)
+}
   
 }
 

@@ -4,7 +4,7 @@
 \alias{run_aermod}
 \title{Run AERMOD}
 \usage{
-run_aermod(input = "aermod.inp", out_file = input$title,
+run_aermod(input = "aermod.inp", out_file = "aermod.out",
   exe_folder = "aermod")
 }
 \arguments{
