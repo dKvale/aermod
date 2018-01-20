@@ -29,4 +29,3 @@ out_df(rect_table = c("ALLAVE 1ST", "1 1ST 8TH"))
 }
 \keyword{aermod}
 \keyword{output}
-

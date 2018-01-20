@@ -5,7 +5,7 @@
 \title{Run AERMOD}
 \usage{
 run_aermod(input = "aermod.inp", out_file = "aermod.out",
-  exe_folder = "aermod")
+  exe_folder = "aermod", silent = FALSE)
 }
 \arguments{
 \item{input}{Path to input file.}
@@ -14,6 +14,8 @@ run_aermod(input = "aermod.inp", out_file = "aermod.out",
 Defaults to value of \code{title} in the provided input file.}
 
 \item{exe_folder}{Folder containing \code{aermod.exe}.}
+
+\item{silent}{Print results to screen. \code{TRUE} or \code{FALSE}}
 }
 \description{
 Call aermod.exe and run input file
@@ -30,4 +32,3 @@ run_aermod(data       = "aermod.inp",
 \keyword{dispersion}
 \keyword{model}
 \keyword{run}
-

@@ -21,4 +21,3 @@ downwash_df(source_id = "STK_1")
 \keyword{building}
 \keyword{downwash}
 \keyword{input}
-

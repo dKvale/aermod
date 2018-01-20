@@ -45,4 +45,3 @@ met_df(surf_file      = "..\\\\MET\\\\RSTMPX5Y.SFC",
 \keyword{meteorology}
 \keyword{surface}
 \keyword{weather}
-

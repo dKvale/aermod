@@ -9,4 +9,3 @@ get_max(data = as.character(NA), property_boundary = as.numeric(NA))
 \description{
 Read maximum dispersion results from AERMOD output file into a data frame.
 }
-

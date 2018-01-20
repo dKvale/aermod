@@ -13,7 +13,8 @@ vignette: >
 
 Default dispersion factors used for screening purposes are updated after the release of a new AERMOD version or MET data set. The model versions^[AERMOD version: 15181] and meteorology^[Met years: 2009-2013; sites MSP & DYT] used for the current dispersion factors are shown on the right. The generated dispersion factors are designed to be protective and overestimate dispersion for real-world operating conditions. The conservative assumptions allow the results to be generalized to a wide set of operation scenarios and provide for quick estimates of air concentrations.
 
-# Updates
+
+## Updates
 
 The table of default dispersion factors was expanded to include the following options.
 

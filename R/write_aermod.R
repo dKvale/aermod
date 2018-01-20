@@ -65,6 +65,8 @@ if(is_valid(so$urban_pop, 1) && min(so$urban_pop, na.rm = TRUE) < 100) {
   warning("A source is assigned an 'urban_pop' value below 100, the source will be modeled using rural dispersion coefficients.")
 }
 
+so[is.na(so)] <- "" 
+
 
 # Create text file
 
@@ -202,17 +204,17 @@ section_head <- "Receptor pathway"
 
 inp_text <- paste0(inp_text, new_section())
 
-if(is_valid(re$recept_file, 1)) {
+if(is_valid(re$receptor_file, 1)) {
   
    inp_text <- paste0(inp_text, 
                       "** The receptor file is attached by the INCLUDED statement below.\n",
-                      "   INCLUDED ", re$recept_file, "\n")
+                      "   INCLUDED ", re$receptor_file, "\n")
 }
 
 if(is_valid(re$recept_as_text, 1)) {
   
   inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n",
-                     re$recept_as_text, "\n")
+                     re$receptor_as_text, "\n")
 }
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
@@ -275,6 +277,8 @@ inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 #invisible(writeLines(inp_text))
   
 if(!is_valid(path)) {
+  
+  print("No path provided to write_aermod(). Results returned to environment.")
   
   return(inp_text)
   

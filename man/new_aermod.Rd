@@ -59,4 +59,3 @@ input_list <- new_aermod(as_one_df = FALSE, met = "rochester_met")
 \keyword{new}
 \keyword{start}
 \keyword{tables}
-

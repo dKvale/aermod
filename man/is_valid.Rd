@@ -39,4 +39,3 @@ is_valid(list(NA, "MyName"), n = 3)
 \keyword{minimum}
 \keyword{test}
 \keyword{valid}
-

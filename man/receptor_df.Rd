@@ -23,4 +23,3 @@ receptor_df(recept_file = "..\\\\Receptors\\\\circleReceptors.ROU")
 \keyword{aermod}
 \keyword{input}
 \keyword{receptors}
-

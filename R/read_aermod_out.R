@@ -1,7 +1,7 @@
 #' Read AERMOD output file
 #'
 #' Read an aermod.out file into a dataframe.
-#' @param file File l ocation. Defaults to "aermod.out".
+#' @param file File location. Defaults to "aermod.out".
 #' @keywords read aermod output results
 #' @export
 #' @examples
@@ -13,8 +13,6 @@
 read_aermod_out <- function(file) {
   
   out <- readLines(file)
-  
-  #out <- out[!grepl("[**]", out)]
 
   # Read dispersion tables
   results_all <- tibble::tibble()
@@ -24,6 +22,8 @@ read_aermod_out <- function(file) {
   for(line in grep("GROUP:", out)) {
     
     start <- line + grep("X-COORD", out[line:length(out)])[1] + 1
+    
+    if(is.na(start)) next()
     
     end   <- start + grep("[***]", out[start:length(out)])[1] - 2
     
@@ -49,30 +49,38 @@ read_aermod_out <- function(file) {
     
     df$group_id    <- strsplit(strsplit(out[line], "GROUP:[[:space:]]+")[[1]][2], "[[:space:]]+[***]")[[1]][1]
     
+    
+    # Remove blanks
+    df <- filter(df, !is.na(x_coord))
+    
+    
     # Force to tibble for storing lists
     df <- tibble::as_data_frame(df)
     
     # Source IDs
-    df <- dplyr::mutate(df, source_ids = strsplit(out[line+1], ":[[:space:]]+")[[1]][2])
+    df <- dplyr::mutate(df, 
+                        source_ids = strsplit(out[line+1], ":[[:space:]]+")[[1]][2],
+                        row_id     = 1:nrow(df))
     
-    df <- dplyr::group_by(df, dplyr::row_number())
+    df <- dplyr::group_by(df, row_id)
     
     df <- dplyr::mutate(df, source_ids = list((strsplit(gsub(" ", "", df$source_ids[1]), ",")[[1]])))
-    
+
+    df$row_id <- NULL
     
     # Combine all groups
-    results_all    <- rbind(results_all, df)
+    results_all    <- dplyr::bind_rows(results_all, df)
   
   }
   
   # Get AERMOD version
-  cat(paste0("AERMOD version #", substring(out[grep("VERSION", out)][1], 25, 29), "\n\n"))
+  print(out[grep("VERSION", out)][1])
   
   # Read source names
-  cat(paste0("Source list: ", paste0(substring(out[grep("LOCATION", out)], 13, 24), collapse = " ")), "\n\n")
+  print(paste0("Source list: ", paste0(substring(out[grep("LOCATION", out)], 13, 24), collapse = " ")))
   
   # Read AERMOD messages
-  cat(paste0(out[(grep("Summary of Total", out)[2]) : (grep("FATAL ERROR", out)[2] - 3)], collapse = "\n"), "\n")
+  cat(paste0(out[max(grep("Summary of Total", out)) : (max(grep("FATAL ERROR", out)) - 3)], collapse = "\n"), "\n")
   
   return(results_all)
 }

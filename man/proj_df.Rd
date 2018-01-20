@@ -26,4 +26,3 @@ proj_df(projection  = "Coordinate System UTM")
 \keyword{options}
 \keyword{output}
 \keyword{projection}
-

@@ -34,4 +34,3 @@ write_aermod(data = aermod_inp, path = "aermod.inp")
 \keyword{input}
 \keyword{save}
 \keyword{write}
-

@@ -50,4 +50,3 @@ control_df(title         = "Demo Energy Station",
 \keyword{control}
 \keyword{input}
 \keyword{options}
-
