@@ -154,11 +154,12 @@ inp_text <- paste0(inp_text,
 
 inp_text <- paste0(inp_text, paste0("   SRCPARAM ", 
                    receptors::fw(so$source_id,   13),
-                   receptors::fw(so$emit_gs,   5),
-                   receptors::fw(so$height_m,    9),
-                   receptors::fw(so$temp_k,      9),
-                   receptors::fw(so$velocity_ms, 10),
-                   so$diameter_m, "\n",
+                   receptors::fw(round(so$emit_gs, 4), 5),
+                   receptors::fw(round(so$height_m, 4), 9),
+                   receptors::fw(round(so$temp_k, 3), 9),
+                   receptors::fw(round(so$velocity_ms, 4), 10),
+                   round(so$diameter_m, 4),
+                   "\n",
                    collapse = ""))
 
 if(is_valid(so$downwash_file[1], 1)) {
@@ -166,7 +167,7 @@ if(is_valid(so$downwash_file[1], 1)) {
   inp_text <- paste0(inp_text, "\n** Building Downwash **\n",
                      "** The building downwash file is attached by the INCLUDED statement below.\n")
 
-  inp_text <- paste0(inp_text, "   INCLUDED ", so$downwash_file[1], "\n")
+  inp_text <- paste0(inp_text, "   INCLUDED ", gsub("/", "\\\\", so$downwash_file[1]), "\n")
 }
 
 inp_text <- paste0(inp_text, "\n** Source groups defined\n")
@@ -189,7 +190,7 @@ if(is.list(so$group_id)) so <- tidyr::unnest(so[ , c("source_id", "group_id")])
 for(group_x in unique(so$group_id)) {
   
   inp_text <- paste0(inp_text, paste0("   SRCGROUP ", 
-                     receptors::fw(toupper(group_x), 5),
+                     receptors::fw(toupper(group_x), 9),
                      ifelse(toupper(group_x) == "ALL", "", toupper(paste(subset(so, group_id == group_x)$source_id))),
                      "\n", 
                      collapse = ""))
@@ -208,7 +209,7 @@ if(is_valid(re$receptor_file, 1)) {
   
    inp_text <- paste0(inp_text, 
                       "** The receptor file is attached by the INCLUDED statement below.\n",
-                      "   INCLUDED ", re$receptor_file, "\n")
+                      "   INCLUDED ", gsub("/", "\\\\", re$receptor_file), "\n")
 }
 
 if(is_valid(re$recept_as_text, 1)) {
@@ -227,8 +228,8 @@ section_head <- "Meteorology Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   "   SURFFILE ", me$surf_file, "\n",
-                   "   PROFFILE ", me$prof_file, "\n",
+                   "   SURFFILE ", gsub("/", "\\\\", me$surf_file), "\n",
+                   "   PROFFILE ", gsub("/", "\\\\", me$prof_file), "\n",
                    "   SURFDATA ", me$surf_site_info, "\n",
                    "   UAIRDATA ", me$upper_air_info, "\n",
                    "   PROFBASE ", me$base_elev_m, "\n")
@@ -250,33 +251,23 @@ section_head <- "Output Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   ifelse(is_valid(ou$rect_table), 
-                          paste0("   RECTABLE ", paste(ou$rect_table[[1]], collapse = " "), "\n"),
-                          ""),
-                   ifelse(is_valid(ou$max_table),  
-                          paste0("   MAXTABLE ", paste(ou$max_table[[1]], collapse = " "), "\n"),
-                          ""),
-                   ifelse(is_valid(ou$day_table),  
-                          paste0("   DAYTABLE ", paste(ou$day_table[[1]], collapse = " "), "\n"),
-                          ""),
-                   ifelse(is_valid(ou$file_form),  
-                          paste0("   FILEFORM ", paste(ou$file_form[[1]], collapse = " "), "\n"),
-                          ""),
-                   ifelse(is_valid(ou$rank_file),  
-                          paste0("   RANKFILE ", paste(ou$rank_file[[1]], collapse = " "), "\n"), 
-                          ""),
-                   ifelse(is_valid(ou$plot_file),  
-                          paste0("   PLOTFILE ", paste(ou$plot_file[[1]], collapse = " "), "\n"),
-                          ""))
+                   if (is_valid(ou$rect_table)) paste("   RECTABLE", strsplit(ou$rect_table, ", ")[[1]], collapse = " \n"),
+                   if (is_valid(ou$max_table))  paste("   MAXTABLE", strsplit(ou$max_table, ", ")[[1]],  collapse = " \n"),
+                   if (is_valid(ou$day_table))  paste("   DAYTABLE", strsplit(ou$day_table, ", ")[[1]],  collapse = " \n"),
+                   if (is_valid(ou$file_form))  paste("   FILEFORM", strsplit(ou$file_form, ", ")[[1]],  collapse = " \n"),
+                   if (is_valid(ou$rank_file))  paste("   RANKFILE", strsplit(ou$rank_file, ", ")[[1]],  collapse = " \n"), 
+                   if (is_valid(ou$plot_file))  paste("   PLOTFILE", strsplit(ou$plot_file, ", ")[[1]],  collapse = " \n"),
+                   "\n",
+                  collapse = "\n")
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
 
 
-# Return results
+# Return input file
 #cat("\nGenerated input file: \n\n")
 #invisible(writeLines(inp_text))
   
-if(!is_valid(path)) {
+if (!is_valid(path)) {
   
   print("No path provided to write_aermod(). Results returned to environment.")
   

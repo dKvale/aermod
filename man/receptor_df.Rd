@@ -2,22 +2,22 @@
 % Please edit documentation in R/receptor_df.R
 \name{receptor_df}
 \alias{receptor_df}
-\title{Receptor options}
+\title{Receptor options data frame}
 \usage{
-receptor_df(recept_file = as.character(NA),
-  recept_as_text = as.character(NA))
+receptor_df(receptor_file = as.character(NA),
+  receptor_as_text = as.character(NA))
 }
 \arguments{
-\item{recept_file}{Receptor file location.}
+\item{receptor_file}{Receptor file location.}
 
-\item{recept_as_text}{Additional receptor locations as text string.}
+\item{receptor_as_text}{Additional receptor locations as text string.}
 }
 \description{
 Create a data frame of AERMOD receptor options.
 }
 \examples{
-\dontrun{
-receptor_df(recept_file = "..\\\\Receptors\\\\circleReceptors.ROU")
+\dontrun {
+receptor_df(receptor_file = "..\\\\receptors\\\\circle_receptors.ROU")
 }
 }
 \keyword{aermod}

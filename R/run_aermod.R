@@ -40,7 +40,11 @@ run_aermod <- function(input      = "aermod.inp",
       
     } else {
        
-       writeLines(readLines(input), paste0(exe_folder, "/aermod.inp"))
+       temp <- readLines(input)
+       
+       Sys.sleep(0.2)
+       
+       writeLines(temp, paste0(exe_folder, "/aermod.inp"))
       
     }
     
