@@ -27,6 +27,3 @@ devtools::install_github("dKvale/aermod")
 
 ### Example
 
-```r
-vignette("")
-```
