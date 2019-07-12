@@ -175,16 +175,3 @@ writeLines(cat(aermod_inp), "aermod.inp")
 ```
 
  
-# Results
-
-The tables and charts below compare the previous screening dispersion factors to the updated results. 
-
-```{r eval=F}
-knitr::kable(
-  mtcars[1:6, 1:6], caption = 'A subset of mtcars.'
-)
-```
-
-
-`r 'In his later books'`
-
