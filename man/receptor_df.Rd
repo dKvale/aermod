@@ -16,9 +16,8 @@ receptor_df(receptor_file = as.character(NA),
 Create a data frame of AERMOD receptor options.
 }
 \examples{
-\dontrun {
-receptor_df(receptor_file = "..\\\\receptors\\\\circle_receptors.ROU")
-}
+\dontrun{receptor_df(receptor_file = "../receptors/circle_receptors.ROU")}
+
 }
 \keyword{aermod}
 \keyword{input}

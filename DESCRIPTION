@@ -16,7 +16,8 @@ Imports:
     receptors,
     installEPA,
     tibble,
-    magrittr
+    magrittr,
+    sf
 Suggests:
     knitr,rmarkdown
 VignetteBuilder: knitr

@@ -6,9 +6,8 @@
 #' @keywords receptors aermod input
 #' @export
 #' @examples
-#' \dontrun {
-#' receptor_df(receptor_file = "..\\receptors\\circle_receptors.ROU")
-#' }
+#' \dontrun{receptor_df(receptor_file = "../receptors/circle_receptors.ROU")}
+#' 
 #
 
 receptor_df <- function(receptor_file    = as.character(NA),
