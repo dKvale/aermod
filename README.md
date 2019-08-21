@@ -19,10 +19,10 @@ http://www.epa.gov/ttn/scram/dispersion_prefrec.htm#aermod
 ```r
 install.packages("devtools")
 
-devtools::install_github("dKvale/installEPA")
-devtools::install_github("dKvale/bpip")
-devtools::install_github("dKvale/receptors")
-devtools::install_github("dKvale/aermod")
+devtools::install_github(c("dKvale/installEPA", 
+                           "dKvale/bpip", 
+                           "dKvale/receptors",
+                           "dKvale/aermod"))
 ```
 
 ### Example
