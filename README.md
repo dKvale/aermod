@@ -35,4 +35,6 @@ library(aermod)
 library(receptors)
 
 recepts <- polar_grid(radii = seq(5, 100, 5))
+
+write_rou(recepts, "receptors.rou")
 ```
