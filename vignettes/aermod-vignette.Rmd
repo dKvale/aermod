@@ -19,7 +19,7 @@ Default dispersion factors used for screening purposes are updated after the rel
 The table of default dispersion factors was expanded to include the following options.
 
 
-- Downwash efffects
+- Downwash effects
 - Minimum exit velocity
 - Minimum stack temperature
 - Minimum stack diameter
