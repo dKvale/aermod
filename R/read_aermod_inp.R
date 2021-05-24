@@ -100,7 +100,7 @@ read_aermod_inp <- function(file,
                         stringsAsFactors = FALSE)
   
   # Create a new row for each source in a group
-  df <- dplyr::group_by(tibble::as_data_frame(df), V2) %>%
+  df <- dplyr::group_by(tibble::tibble(df), V2) %>%
         dplyr::mutate(source_id = list(strsplit(V4, " ")[[1]])) %>%
         tidyr::unnest(source_id)
   
