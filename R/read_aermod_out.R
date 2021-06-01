@@ -73,7 +73,7 @@ read_aermod_out <- function(file) {
   }
   
   # Get AERMOD version
-  print(out[grep("VERSION", out)][1])
+  print(out[grep("VERSION", out)][1:2])
   
   # Read source names
   print(paste0("Source list: ", paste0(substring(out[grep("LOCATION", out)], 13, 24), collapse = " ")))
