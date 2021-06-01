@@ -19,9 +19,9 @@
 #' }
 #
 read_aermod_inp <- function(file, 
-                            as_one_df   = TRUE) {
+                            as_one_df = TRUE) {
   
-  inp <- readLines(file)
+  inp <- readr::read_lines(file)
   
   inp <- inp[!grepl("[**]", inp)]
   
