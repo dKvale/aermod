@@ -12,7 +12,7 @@
 
 read_aermod_out <- function(file) {
   
-  out <- readLines(file)
+  out <- readr::read_lines(file)
 
   # Read dispersion tables
   results_all <- tibble::tibble()
@@ -51,11 +51,10 @@ read_aermod_out <- function(file) {
     
     
     # Remove blanks
-    df <- filter(df, !is.na(x_coord))
-    
+    df <- dplyr::filter(df, !is.na(x_coord))
     
     # Force to tibble for storing lists
-    df <- tibble::as_data_frame(df)
+    df <- tibble::as_tibble(df)
     
     # Source IDs
     df <- dplyr::mutate(df, 
@@ -80,7 +79,7 @@ read_aermod_out <- function(file) {
   print(paste0("Source list: ", paste0(substring(out[grep("LOCATION", out)], 13, 24), collapse = " ")))
   
   # Read AERMOD messages
-  cat(paste0(out[max(grep("Summary of Total", out)) : (max(grep("FATAL ERROR", out)) - 3)], collapse = "\n"), "\n")
+  cat(paste0(out[max(grep("Summary of Total", out)) : (max(grep("AERMOD Finishes", out)) + 2)], collapse = "\n"), "\n")
   
   return(results_all)
 }
