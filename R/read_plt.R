@@ -2,7 +2,7 @@
 #' 
 #' Read a table of AERMOD receptor concentration data from the
 #' PLOTFILE option into a \code{\link{data.frame}}.
-#' @param infile Input pos file to read.
+#' @param infile Input PLT file to read.
 #' @keywords plt plot
 #' @export
 #' @examples read_plt("project/pm25_srcgrp1.PLT")
