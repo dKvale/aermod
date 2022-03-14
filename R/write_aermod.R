@@ -18,13 +18,12 @@
 # 
 # 
 write_aermod <- function(data      = NULL, 
-                         path      = NULL,
+                         path      = "aermod.inp",
                          control   = NULL,
                          sources   = NULL,
                          receptors = NULL,
                          met       = NULL,
-                         out       = NULL
-) {
+                         out       = NULL) {
 
 # Data tests    
 if((is.null(data) || nrow(data) < 1) & (is.null(sources) || nrow(sources) < 1)) {
@@ -34,7 +33,7 @@ if((is.null(data) || nrow(data) < 1) & (is.null(sources) || nrow(sources) < 1)) 
 ## Use pathway specific tables if provided
 if(is.null(control) || !is.data.frame(control) || nrow(control) < 1) {co <- data[1, ]} else {co <- control[1, ]}
 
-if(is.null(sources) || !is.data.frame(sources) || nrow(sources) < 1) {so <- data} else {so <- sources}
+if(is.null(sources) || !is.data.frame(sources) || nrow(sources) < 1) {so <- data} else {so <- sources[1, ]}
 
 if(is.null(receptors) || !is.data.frame(receptors) || nrow(receptors) < 1) {re <- data[1, ]} else {re <- receptors[1, ]}
 
@@ -44,32 +43,33 @@ if(is.null(out) || !is.data.frame(out) || nrow(out) < 1) {ou <- data[1, ]} else 
 
   
 # Replace `NA` values with blanks to avoid printing 'NA'
+co <- data.frame(co)
+so <- data.frame(so)
+re <- data.frame(re)
+me <- data.frame(me)
+ou <- data.frame(ou)
+  
 co[is.na(co)] <- ""  
-
 so[is.na(so)] <- ""  
-
 re[is.na(re)] <- ""  
-
 me[is.na(me)] <- ""  
-
 ou[is.na(ou)] <- ""  
 
 
-# Check if urban population at least 100
+# Check if urban population at least 10,000
 if(!is_valid(so$urban_pop, 1)) so$urban_pop <- NA
 
-if(is_valid(so$urban_pop, 1) && min(so$urban_pop, na.rm = TRUE) < 100) {
+if(is_valid(so$urban_pop, 1) && min(so$urban_pop, na.rm = TRUE) < 10000) {
   
-  so$urban_pop <- sapply(so$urban_pop, function(x) ifelse(is_valid(x, 1) && x < 100, NA, x))
+  so$urban_pop <- sapply(so$urban_pop, function(x) ifelse(is_valid(x, 1) && x < 10000, NA, x))
                       
-  warning("A source is assigned an 'urban_pop' value below 100, the source will be modeled using rural dispersion coefficients.")
+  warning("A source is assigned an 'urban_pop' value below 10,000, the source will be modeled using rural dispersion coefficients.")
 }
 
 so[is.na(so)] <- "" 
 
 
 # Create text file
-
 ## Header
 inp_text <- paste0("**\n",
                    "** AERMOD input file\n",
@@ -106,7 +106,7 @@ if(is_valid(so$urban_pop, 1)) {
   inp_text <- paste0(inp_text,
                      paste0("   URBANOPT ",
                             if(length(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))]) > 1) { 
-                                   receptors::fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7)
+                                   fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7)
                               } else "",
                             so$urban_pop[sapply(so$urban_pop, function(x) is_valid(x))], 
                             collapse = "\n"), "\n")
@@ -122,7 +122,6 @@ inp_text <- paste0(inp_text, "   POLLUTID ", co$pollutant_id, "\n")
 #} 
 
 if(is_valid(co$flagpole, 1)) inp_text <- paste0(inp_text, "   FLAGPOLE ", co$flagpole, "\n")
-
 
 inp_text <- paste0(inp_text, 
                    "   RUNORNOT RUN\n",
@@ -140,10 +139,10 @@ inp_text <- paste0(inp_text,
                    "**          source_id    type       x_coord     y_coord          elevation_m **\n")
 
 inp_text <- paste0(inp_text, paste0("   LOCATION ",        
-                   receptors::fw(so$source_id, 13),
-                   receptors::fw(so$type,      11),
-                   receptors::fw(so$x_coord,   12),
-                   receptors::fw(so$y_coord,   17),
+                   fw(so$source_id, 13),
+                   fw(so$type,      11),
+                   fw(so$x_coord,   12),
+                   fw(so$y_coord,   17),
                    so$elevation_m, "\n",
                    "** DESCRSRC ", so$description, "\n", 
                    collapse = ""))
@@ -153,11 +152,11 @@ inp_text <- paste0(inp_text,
                    "**          source_id    g/s  ht_m     temp_K   vel_m/s   diameter_m **\n")
 
 inp_text <- paste0(inp_text, paste0("   SRCPARAM ", 
-                   receptors::fw(so$source_id,   13),
-                   receptors::fw(round(so$emit_gs, 4), 5),
-                   receptors::fw(round(so$height_m, 4), 9),
-                   receptors::fw(round(so$temp_k, 3), 9),
-                   receptors::fw(round(so$velocity_ms, 4), 10),
+                   fw(so$source_id,   13),
+                   fw(round(so$emit_gs, 4), 5),
+                   fw(round(so$height_m, 4), 9),
+                   fw(round(so$temp_k, 3), 9),
+                   fw(round(so$velocity_ms, 4), 10),
                    round(so$diameter_m, 4),
                    "\n",
                    collapse = ""))
@@ -177,20 +176,20 @@ if(is_valid(so$urban_pop, 1)) {
   inp_text <- paste0(inp_text,
                      paste0("   URBANSRC ",
                             if(length(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))]) > 1) { 
-                              receptors::fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7)
+                              fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7)
                             } else "",
-                            receptors::fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7),
+                            fw(substr(so$source_id[sapply(so$urban_pop, function(x) is_valid(x))], 1, 6), 7),
                            collapse = "\n"), "\n")
 }
 
 # Split multiple group_ids
-if(is.list(so$group_id)) so <- tidyr::unnest(so[ , c("source_id", "group_id")])
+if(is.list(so$group_id)) so <- tidyr::unnest(so[ , c("source_id", "group_id")], cols = c(group_id))
 
 # Paste together sources assigned to the same group_id
 for(group_x in unique(so$group_id)) {
   
   inp_text <- paste0(inp_text, paste0("   SRCGROUP ", 
-                     receptors::fw(toupper(group_x), 9),
+                     fw(toupper(group_x), 9),
                      ifelse(toupper(group_x) == "ALL", "", toupper(paste(subset(so, group_id == group_x)$source_id))),
                      "\n", 
                      collapse = ""))
@@ -251,13 +250,12 @@ section_head <- "Output Pathway"
 inp_text <- paste0(inp_text, new_section())
 
 inp_text <- paste0(inp_text, 
-                   if (is_valid(ou$rect_table)) paste("   RECTABLE", strsplit(ou$rect_table, ", ")[[1]], collapse = " \n"),
-                   if (is_valid(ou$max_table))  paste("   MAXTABLE", strsplit(ou$max_table, ", ")[[1]],  collapse = " \n"),
-                   if (is_valid(ou$day_table))  paste("   DAYTABLE", strsplit(ou$day_table, ", ")[[1]],  collapse = " \n"),
-                   if (is_valid(ou$file_form))  paste("   FILEFORM", strsplit(ou$file_form, ", ")[[1]],  collapse = " \n"),
-                   if (is_valid(ou$rank_file))  paste("   RANKFILE", strsplit(ou$rank_file, ", ")[[1]],  collapse = " \n"), 
-                   if (is_valid(ou$plot_file))  paste("   PLOTFILE", strsplit(ou$plot_file, ", ")[[1]],  collapse = " \n"),
-                   "\n",
+                   if (is_valid(ou$rect_table)) paste("   RECTABLE", str_split(ou$rect_table[[1]],  ", ")[[1]], " \n", collapse = ""),
+                   if (is_valid(ou$max_table))  paste("   MAXTABLE", paste(ou$max_table[[1]],  collapse = " "), " \n"),
+                   if (is_valid(ou$day_table))  paste("   DAYTABLE", paste(ou$day_table[[1]],  collapse = " "), " \n"),
+                   if (is_valid(ou$file_form))  paste("   FILEFORM", paste(ou$file_form[[1]],  collapse = " "), " \n"),
+                   if (is_valid(ou$rank_file))  paste("   RANKFILE", paste(ou$rank_file[[1]],  collapse = " "), " \n"), 
+                   if (is_valid(ou$plot_file))  paste("   PLOTFILE", paste(ou$plot_file[[1]],  collapse = " "), " \n"),
                   collapse = "\n")
 
 inp_text <- paste0(inp_text, section, " FINISHED \n**\n")
@@ -283,4 +281,3 @@ if (!is_valid(path)) {
 }
   
 }
-
