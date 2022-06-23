@@ -63,7 +63,7 @@ if(is_valid(so$urban_pop, 1) && min(so$urban_pop, na.rm = TRUE) < 10000) {
   
   so$urban_pop <- sapply(so$urban_pop, function(x) ifelse(is_valid(x, 1) && x < 10000, NA, x))
                       
-  warning("A source is assigned an 'urban_pop' value below 10,000, the source will be modeled using rural dispersion coefficients.")
+  message("FYI: A source is assigned an 'urban_pop' value below 10,000, the source will be modeled using rural dispersion coefficients.")
 }
 
 so[is.na(so)] <- "" 
