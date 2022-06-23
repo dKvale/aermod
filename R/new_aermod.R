@@ -57,7 +57,7 @@ new_aermod <- function(aermod        = "aermod_inp",
   # Output
   if(as_one_df) {
   
-    aermod_inp <- tibble::as_data_frame(cbind(co, so, re, me, ou)) 
+    aermod_inp <- tibble::as_tibble(cbind(co, so, re, me, ou)) 
     
     if(add_to_envir) assign(aermod, aermod_inp, pos = 1)
     
