@@ -40,8 +40,6 @@ met_df <- function(surf_file      = as.character(NA),
     
     surf_met   <- try(readLines(surf_file), silent = TRUE)
     
-    #surf_met   <- readLines("M:\\KME Files\\RASSUpdate2015\\AERSCREEN vs. AERMOD\\AERSCREEN (new version)\\aerscreen_02_01.sfc")
-    
     if(class(surf_met) != "try-error") {
       
       # Remove blank rows
@@ -103,4 +101,3 @@ met_df <- function(surf_file      = as.character(NA),
   return(df)
 }
 
-##
