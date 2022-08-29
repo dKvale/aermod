@@ -4,10 +4,15 @@
 \alias{met_df}
 \title{Meteorology options}
 \usage{
-met_df(surf_file = as.character(NA), surf_site_info = as.character(NA),
-  prof_file = as.character(NA), upper_air_info = as.character(NA),
-  base_elev_m = as.numeric(NA), start_date = as.character(NA),
-  end_date = as.character(NA))
+met_df(
+  surf_file = as.character(NA),
+  surf_site_info = as.character(NA),
+  prof_file = as.character(NA),
+  upper_air_info = as.character(NA),
+  base_elev_m = as.numeric(NA),
+  start_date = as.character(NA),
+  end_date = as.character(NA)
+)
 }
 \arguments{
 \item{surf_file}{Surface met data file location.}

@@ -211,7 +211,7 @@ if(is_valid(re$receptor_file, 1)) {
                       "   INCLUDED ", gsub("/", "\\\\", re$receptor_file), "\n")
 }
 
-if(is_valid(re$recept_as_text, 1)) {
+if(is_valid(re$receptor_as_text, 1)) {
   
   inp_text <- paste0(inp_text, "** Locations of additional receptors are shown below.\n",
                      re$receptor_as_text, "\n")

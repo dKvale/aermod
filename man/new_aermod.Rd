@@ -4,9 +4,16 @@
 \alias{new_aermod}
 \title{Create AERMOD input tables}
 \usage{
-new_aermod(aermod = "aermod_inp", as_one_df = TRUE, add_to_envir = FALSE,
-  control = "control", sources = "sources", receptors = "receptors",
-  met = "met", out = "out")
+new_aermod(
+  aermod = "aermod_inp",
+  as_one_df = TRUE,
+  add_to_envir = FALSE,
+  control = "control",
+  sources = "sources",
+  receptors = "receptors",
+  met = "met",
+  out = "out"
+)
 }
 \arguments{
 \item{aermod}{Name of AERMOD input data frame added to Global Environment. 

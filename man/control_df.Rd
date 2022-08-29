@@ -4,11 +4,18 @@
 \alias{control_df}
 \title{Control options}
 \usage{
-control_df(title = as.character(NA), subtitle = as.character(NA),
-  model_opt = c("DFAULT", "CONC"), avg_time = c("1", "24", "ANNUAL"),
-  pollutant_id = "OTHER", flagpole = as.character(NA),
-  event_file = as.character(NA), error_file = as.character(NA),
-  multi_year = as.character(NA), debug_opt = as.character(NA))
+control_df(
+  title = as.character(NA),
+  subtitle = as.character(NA),
+  model_opt = c("DFAULT", "CONC"),
+  avg_time = c("1", "24", "ANNUAL"),
+  pollutant_id = "OTHER",
+  flagpole = as.character(NA),
+  event_file = as.character(NA),
+  error_file = as.character(NA),
+  multi_year = as.character(NA),
+  debug_opt = as.character(NA)
+)
 }
 \arguments{
 \item{title}{Title of modeling run. `TITLEONE` of AERMOD input file.}

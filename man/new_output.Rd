@@ -4,9 +4,14 @@
 \alias{new_output}
 \title{Output options}
 \usage{
-new_output(rect_table = "ALLAVE 1ST, 1 1ST", max_table = as.character(NA),
-  day_table = as.character(NA), file_form = as.character(NA),
-  rank_file = as.character(NA), plot_file = as.character(NA))
+new_output(
+  rect_table = "ALLAVE 1ST, 1 1ST",
+  max_table = as.character(NA),
+  day_table = as.character(NA),
+  file_form = as.character(NA),
+  rank_file = as.character(NA),
+  plot_file = as.character(NA)
+)
 }
 \arguments{
 \item{rect_table}{Output options as text. Enter multiple options as a vector: \code{c("ALLAVE 1ST", "1 1ST")}}

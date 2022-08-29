@@ -4,10 +4,15 @@
 \alias{proj_df}
 \title{Projection details}
 \usage{
-proj_df(projection = "Coordinate System UTM",
+proj_df(
+  projection = "Coordinate System UTM",
   description = "UTM: Universal Transverse Mercator",
-  datum = "North American datum 1983", dtmrgn = "conus", units = "m",
-  zone = "15", zone_inx = "0")
+  datum = "North American datum 1983",
+  dtmrgn = "conus",
+  units = "m",
+  zone = "15",
+  zone_inx = "0"
+)
 }
 \arguments{
 \item{projection}{Name of coordinate projection used for receptors.}

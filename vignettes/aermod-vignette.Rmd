@@ -1,5 +1,5 @@
 ---
-title: "Method for updating air screening dispersion factors"
+title: "Updating air screening dispersion factors"
 author: "MPCA - Risk evaluation and air modeling, EAO"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,15 +9,14 @@ vignette: >
 ---
 
 
-## Mission
+## Summary
 
-Default dispersion factors used for screening purposes are updated after the release of a new AERMOD version or MET data set. The model versions^[AERMOD version: 15181] and meteorology^[Met years: 2009-2013; sites MSP & DYT] used for the current dispersion factors are shown on the right. The generated dispersion factors are designed to be protective and overestimate dispersion for real-world operating conditions. The conservative assumptions allow the results to be generalized to a wide set of operation scenarios and provide for quick estimates of air concentrations.
+Default dispersion factors used for screening purposes are updated after the release of a new AERMOD version or MET data set. The most recent model versions^[AERMOD version: 22112] and processed meteorology^[Met years: 2016-2020; sites MSP] were used for the current dispersion factors. The generated dispersion factors are designed to be protective and overestimate dispersion for most real-world operating conditions. The conservative assumptions allow the results to be generalized to a wide set of operation scenarios and provide for quick estimates of air concentrations.
 
 
 ## Updates
 
 The table of default dispersion factors was expanded to include the following options.
-
 
 - Downwash effects
 - Minimum exit velocity
@@ -25,12 +24,10 @@ The table of default dispersion factors was expanded to include the following op
 - Minimum stack diameter
 
 
-_If you have requests or recommendations, please submit them to https://github.com. For general questions, contact [air.modeling@mn.state.us](emailto::air.modeling@mn.state.us)._
-
 # Assumptions
 
-1. __Downwash:__ Worst-case downwash parameters were captured for each scenario by including buildings located 50 meters from the facility in each of the 8 cardinal directions. Three building heights were modeled for each scenario: 50%, 75% and 100% of the stack height.   
-1. __Meteorology:__ Each scenario was modeled with met data from `MSP` and `DUL`. 
+1. __Downwash:__ Worst-case downwash parameters were captured for each scenario by including buildings located directly under the source, 20 meters, and 40 meters from the facility in each of the 8 cardinal directions. Three building heights were modeled for each scenario: 75%, 100% and 125% of the stack height.   
+1. __Meteorology:__ Each scenario was modeled with meteorology data from `MSP`. 
 1. __Stack temperature:__ A minimum stack temperature that is as warm as ambient conditions.  
 1. __Exit velocity:__ A minimum exit velocity of 0.2 m/s.
 
@@ -38,140 +35,271 @@ _If you have requests or recommendations, please submit them to https://github.c
 _The screening dispersion factors are not considered protective for facilities with exit temperatures below ambient or for sources with near zero exit velocity._
 
 5. __Receptor grid:__  
-  > 2 meter spacing for receptors up to 50m from the facility  
-  > 5 meter spacing for receptors up to 110m  
-  > 10 meter spacing for receptors up to 200m  
-  
 5. __Flat terrain:__ The model was run with the `flat terrain` option.
 5. __Rural:__ The model was run with the default  `rural` option.
 
 
-# Alernatives
-
-AERSCREEN uses a simple factor method to estimate annual average concentrations - divide the 1-hour maximum by ten. While this method is appropriate for nearby receptors, it results in overly protecive estimates for distances greater than 50 meters.
-
-
 # Input files
-An input file was created for each of the scenario combinations below. `r "672 scenarios were modeled in total."` There was a total of 168 different sources, each modeled using 2 sets of MET data with downwash both and and off.
-
-  - Two met files: Minneapolis (MSP) and Duluth (DYT)   
-  - 44 stack heights: [1 to 37 and 40, 45, 50, 60, 70, 80, 90] meters    
-  - 7 stack diameters: [0.15, 0.3, 0.6, 1, 1.5, 2.5, 3.5] meters    
+An input file was created for each of the scenario combinations below.
+ 
+  - 27 stack heights: [3 to 10, and 12,14,16...26, 30,35,40...65, 70,80,90] meters    
+  - 7 stack diameters: [0.15, 0.3, 0.6, 1, 1.5, 2, 3] meters    
   - 6 exit velocities: [0.2, 1, 3, 10, 20, 35] m/s  
   - 4 exit temperatures: [Ambient, 293, 315, 450] kelvin
-  - 2: Downwash on/off
  
-## Load MET data
+ 
+## Model setup
 ```{r eval=F}
+library(tidyverse)
+library(installEPA)
 library(aermod)
+library(bpip) #remotes::install_github(c("dKvale/receptors", "dKvale/bpip"))
 
-# MSP
-MSP <- met_tbl()
-MSP$SURFFILE <- "..\\RASSUpdate_Met1\\aq2-115\\MSPMPX5Y_20092013\\MSPMPX5Y.sfc"
-MSP$PROFFILE <- "..\\RASSUpdate_Met1\\aq2-115\\MSPMPX5Y_20092013\\MSPMPX5Y.pfl"
-MSP$SURFDATA <- "14922 2009 MINNEAPOLIS-ST_PAUL/INTL_ARP"
-MSP$UAIRDATA <- "94983 2009"
-MSP$PROFBASE <- "256.11 METERS"
-MSP$STARTEND <- ""
-
-MSP <- list(MSP = MSP)
-                
-# DULUTH
-DUL <- met_tbl()
-DUL$SURFFILE <- "..\\RASSUpdate_Met2\\aq2-104\\DYTINL5Y_20092013\\DYTINL5Y.sfc"
-DUL$PROFFILE <- "..\\RASSUpdate_Met2\\aq2-104\\DYTINL5Y_20092013\\DYTINL5Y.pfl"
-DUL$SURFDATA <- "4919 2009 Duluth_Sky_ARP"
-DUL$UAIRDATA <- "14918 2009 INTERNATIONAL_FALLS/INTL_ARP"
-DUL$PROFBASE <- "256.11 METERS"
-DUL$STARTEND <- ""
-
-DUL <- list(Duluth = DUL)
+install_epa(c("aermod", "aerscreen", "bpip", "makemet"), 
+            dir = "EPA")
 
 ```
 
+ 
+## Set MET data options
 
-## Set input parameters
 ```{r eval=F}
 
-sk_heights <- c(1:37, 40, 45, 50, 60, 70, 80, 90)
-  
-sk_diameters <- c(0.15, 0.3, 0.6, 1, 1.5, 2.5, 3.5) 
-  
-sk_velocity <- c(0.2, 1, 3, 10, 20, 35) 
+# Site specific MET data
+## MSP airport is used below
+aer_input <- new_aermod()
+
+# Add SFC and PFL files in aermod.exe folder ----
+aer_input$surf_file <- "AERMET_KMSPMPX_2016.SFC" 
+aer_input$prof_file <- "AERMET_KMSPMPX_2016.PFL" 
+aer_input$surf_site_info <- "21112 2016 MINNEAPOLIS-ST_PAUL/INTL_ARP"
+aer_input$upper_air_info <- "72649 2016 Chanhassen"
+aer_input$base_elev_m <- "0.0 METERS"
+aer_input$start_date <- ""
+aer_input$end_date <- ""
+
+glimpse(aer_input)
+```
+
+
+## Set receptor options
+```{r eval=F}
+# Point to receptor grid file
+## aer_input$receptor_file <- "receptors.rou"
+
+# Create polar receptor grid ----
+aer_input$source_id <- "STK1"
+
+grid_text <- paste0("RE GRIDPOLR POL1 STA \n",
+                    "                 ORIG STK1 \n",
+                    "                 DIST 10. 50. 100. 300. 500. 1000. 2000. \n",
+                    "                 GDIR 36 10. 10. \n",
+                    "RE GRIDPOLR POL1 END")
+
+cat(grid_text)
+
+aer_input$receptor_as_text <- grid_text
+aer_input$recept_as_text   <- grid_text  # Ensures this works w/ previous vers. of aermod package
+```
+
+
+## Set contstant parameters that remain stable for each run ----
+```{r eval=F}
+aer_input$x_coord  <- 0
+aer_input$y_coord  <- 0
+aer_input$type     <- "POINT"
+aer_input$desc_src <- ""
+aer_input$emit_gs  <- 1
+aer_input$elevation_m <- 0
+```
+
+
+## Set input parameter ranges for loop
+```{r eval=F}
+sk_heights <- c(3:10, seq(12, 26, 2), seq(30, 70, 5), seq(80, 90, 10))
+
+sk_diameters <- c(0.15, 0.3, 0.6, 1, 1.5, 2, 3) 
+
+sk_velocity  <- c(0.5, 1, 3, 10, 20, 35)
 
 tempsK <- c(0, 293, 315, 450)
+# tempsF <- list("Ambient", 68, 107, 350)
 
-tempsF <- list("Ambient", 68, 107, 350)
-  
-n_scenarios <- 2 * nrow(sk_diameters) * nrow(sk_velocity) * nrow(tempsK) 
-  
+bld_ht_fractions <- c(0.75, 1, 1.25)
+
+
+n_scenarios <- length(sk_heights) * length(sk_diameters) * length(sk_velocity) * length(tempsK) * length(bld_ht_fractions) 
 ```
 
-## Run AERMOD for each scenario
+
+## Run AERMOD for each scenario ----
 ```{r eval=F}
-
-for(met_file in list(MSP, DUL)) {
-
-for(height in sk_heights) {
-
-for(diam in sk_diameters) {
-
-for(velocity in sk_velocity) {
-
-for(tempK in tempsK) {
-
-# CONTROL OPTIONS
-co <- control_tbl()
-co$TITLEONE <- paste(height, "Meter stacks")
-co$TITLETWO <- paste0("Met Data: ", names(met_file))
-co$MODELOPT <- paste("CONC", "FLAT")
-co$AVERTIME <- paste("1", "ANNUAL")
-
-# SOURCE OPTIONS
-so <- source_tbl()
-so$ELEV     <- strsplit(met_file$PROFBASE, " ")[[1]][1]
-so$XCOORD   <- 407502.89
-so$YCOORD   <- 5133986.24
-so$TYPE     <- "POINT"
-so$ID       <- paste(height, grep(diam, sk_diameters), grep(velocity, sk_velocity), grep(tempK, tempsK), sep="_")
-so$DESCRSRC <- ""
-so$EMISS    <- 1
-so$HEIGHT   <- height
-so$TEMPK    <- tempK
-so$VELOCITY <- velocity
-so$DIAMETER <- diam
-so$DOWNFILE <- ""
-so$GROUPID  <- so$ID
-so$GROUPSRC <- so$ID    
-
-
-# RECEPTORS  
-re <- receptor_tbl()
-re$RECTFILE <- "..\\Receptors\\circleReceptors.ROU"
+for (height in sk_heights) {
+  
+  # Run BPIP for new stack height
+  ## Loop through 3 different building heights
+  for (bld_ht_frx in bld_ht_fractions) {
     
-# METEOROLOGY
-me <- metFile[[1]]
-
-# OUTPUT
-ou <- out_tbl()
-ou$RECTABLE <- "ALLAVE 1ST, 1 1ST"
+    # For stacks > 60 meters, skip to next after first bpip run
+    ## Reduces the # of runs with extremely high buildings
+    if (height > 60 & bld_ht_frx != bld_ht_fractions[1]) next()  
+   
     
-# PROJECT
-po <- proj_tbl()
+    ## Create new bpip table
+    builds <- new_bpip()
     
-# Create master input table
-aermod_inp <- cbind(co, po, me)
+    # Set uniform building params
+    builds$source_name   <- "STK1"
+    builds$source_height <- height
+    builds$bld_height    <- height * bld_ht_frx
+    builds$bld_rotation  <- 45
+    builds$length_y      <- 15
+    builds$width_x       <- 15
     
-
-# SAVE INPUT FILE
-writeLines(cat(aermod_inp), "aermod.inp")
-
+    glimpse(builds)
+  
     
-# RUN AERMOD
-
+    # Add 16 buildings around the source at
+    # 2 distances: 20 and 40 meters
+    for (i in 1:16) {
+      bld_distance <- ifelse(i < 9, 20, 40)
+      
+      print(c(i, bld_distance))
+      
+      builds[i,]                   <- builds[1,]
+      builds[i,]$bld_id            <- paste0("BLD_", i)
+      builds[i,]$dist_from_source  <- bld_distance 
+      builds[i,]$angle_from_source <- (i-1) * 45
+    }
+    
+    # Add a building directly under source
+    builds[17, ] <- builds[1, ]
+    builds[17, ]$bld_id <- paste0("BLD_", 17)
+    builds[17, ]$dist_from_source  <- 0
+    builds[17, ]$angle_from_source <- 0
+    builds[17, ]$bld_height <- height
+    
+    glimpse(builds)
+    
+    # Plot building
+    plot_bpip(builds)
+    
+    # Save bpip input file
+    bpi_name <- paste0("input_building_", height, ".bpi")
+    
+    write_bpip(builds, paste0("EPA/bpip/", bpi_name))
+    
+    # Run bpip
+    run_bpip(input  = bpi_name, 
+             output = paste0("downwash_results_", height), 
+             exe_folder = "EPA/bpip")
+    
+    # Read results
+    bpip_results <- read_bpip_out(file = paste0("downwash_results_", height, ".out"),
+                                  as_text = FALSE)
+    
+    #cat(bpip_results)
+    
+    aer_input$downwash_file <- paste0("downwash_results_", height, ".out")
+  
+    
+  # Loop through remaining parameters
+  for (diam in sk_diameters) {
+    for (velocity in sk_velocity) {
+      for (tempK in tempsK) {
+        
+        # Current scenario
+        cat(paste0("Running\n Stack height: ", height,
+                     "\n Building height: ", bld_ht_frx,
+                     "\n Diameter: ", diam,
+                     "\n Velocity: ", velocity,
+                     "\n Temp: ", tempK, "\n\n"))
+        
+        
+        # CONTROL OPTIONS
+        aer_input$title <- paste(height, "meter stack")
+        aer_input$subtitle <- paste0("Met Data: ", aer_input$surf_site_info)
+        aer_input$model_opt <- paste("CONC", "FLAT")
+        aer_input$aver_time <- paste("1", "24", "ANNUAL")
+        
+        # SOURCE OPTIONS
+        aer_input$height_m <- height
+        aer_input$temp_k   <- tempK
+        aer_input$velocity_ms <- velocity
+        aer_input$diameter_m  <- diam
+        aer_input$group_id  <- aer_input$source_id
+        aer_input$group_src <- aer_input$source_id    
+        
+        # DOWNWASH
+        ## Set above: Re-ran for each stack height and 3 building heights
+        
+        # RECEPTORS  
+        ## Set globally above as polar grid
+          
+        # METEOROLOGY
+        ## Set globally above
+        
+        # OUTPUT
+        aer_input$rect_table <- "ALLAVE 1ST, 1 1ST, 24 1ST"
+          
+        # SAVE INPUT FILE
+        write_aermod(aer_input, path = "aermod.inp")
+          
+        # RUN AERMOD
+        run_aermod(exe_folder = "EPA",
+                   out_file = paste0(height, "_", 
+                                     velocity, "_",
+                                     diam, "_",
+                                     tempK, "_",
+                                     "bld", 
+                                     gsub("[.]", "", bld_ht_frx), 
+                                     ".out"))
 
 }}}}}
 
 ```
 
+
+## Process results ----
+```{r eval=F}
+# Blank results table
+results <- tibble()
+
+distances <- c(seq(10, 99, 1), seq(100, 2000, 100))
+
+avg_times <- c("ANNUAL AVERAGE CONCENTRATION", 
+               "1ST HIGHEST  24-HR AVERAGE CONCENTRATION",
+               "1ST HIGHEST  1-HR AVERAGE CONCENTRATION")
+
+# Loop through each of the aermod output files
+for (i in list.files("./your_output_directory", 
+                     pattern = ".out", 
+                     full.names = TRUE)) {
+  
+  # Create table to store result for each distance and avg time
+  tmp_results <- tibble(distance = rep(distances, each = length(avg_times)),
+                        avg_time = rep(avg_times, length(distances)),
+                        disp_factor = as.numeric(NA))
+  
+  df <- read_aermod_out(i)
+  
+  df$distance <- sqrt(df$x_coord**2 + df$y_coord**2)
+  
+  # Find max value for each buffer distance
+  for (x in 1:nrow(tmp_results)) {
+    
+    tmp_row <- tmp_results[x, ]
+    
+    max_disp_factor <- df %>%
+      filter(distance >= tmp_row$distance,
+             model_opts == tmp_row$avg_time) %>%
+      .$concentration %>%
+      max(., na.rm = TRUE)
+    
+    tmp_results[x, "disp_factor"] <- max_disp_factor
+  }
+  
+  results <- bind_rows(tmp_results, results)
+}
+```
  

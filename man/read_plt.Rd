@@ -7,7 +7,7 @@
 read_plt(infile)
 }
 \arguments{
-\item{infile}{Input pos file to read.}
+\item{infile}{Input PLT file to read.}
 }
 \description{
 Read a table of AERMOD receptor concentration data from the

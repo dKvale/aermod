@@ -4,13 +4,22 @@
 \alias{source_df}
 \title{Source options}
 \usage{
-source_df(source_id = as.character(NA), description = as.character(NA),
-  elevation_m = as.numeric(NA), x_coord = as.numeric(NA),
-  y_coord = as.numeric(NA), type = c("point"), emit_gs = as.numeric(NA),
-  height_m = as.numeric(NA), temp_k = as.numeric(NA),
-  velocity_ms = as.numeric(NA), diameter_m = as.numeric(NA),
-  downwash_file = as.character(NA), urban_pop = as.numeric(NA),
-  group_id = as.character(NA))
+source_df(
+  source_id = as.character(NA),
+  description = as.character(NA),
+  elevation_m = as.numeric(NA),
+  x_coord = as.numeric(NA),
+  y_coord = as.numeric(NA),
+  type = c("point"),
+  emit_gs = as.numeric(NA),
+  height_m = as.numeric(NA),
+  temp_k = as.numeric(NA),
+  velocity_ms = as.numeric(NA),
+  diameter_m = as.numeric(NA),
+  downwash_file = as.character(NA),
+  urban_pop = as.numeric(NA),
+  group_id = as.character(NA)
+)
 }
 \arguments{
 \item{source_id}{Emission source ID or name.}

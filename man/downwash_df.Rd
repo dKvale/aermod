@@ -4,9 +4,14 @@
 \alias{downwash_df}
 \title{Downwash options}
 \usage{
-downwash_df(source_id = as.character(NA), bld_heights = as.numeric(NA),
-  bld_widths = as.numeric(NA), bld_lengths = as.numeric(NA),
-  x_badj = as.numeric(NA), y_badj = as.numeric(NA))
+downwash_df(
+  source_id = as.character(NA),
+  bld_heights = as.numeric(NA),
+  bld_widths = as.numeric(NA),
+  bld_lengths = as.numeric(NA),
+  x_badj = as.numeric(NA),
+  y_badj = as.numeric(NA)
+)
 }
 \arguments{
 \item{source_id}{Emission source ID or name.}

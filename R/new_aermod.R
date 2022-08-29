@@ -59,11 +59,11 @@ new_aermod <- function(aermod        = "aermod_inp",
   
     aermod_inp <- tibble::as_tibble(cbind(co, so, re, me, ou)) 
     
-    if(add_to_envir) assign(aermod, aermod_inp, pos = 1)
+    if (add_to_envir) assign(aermod, aermod_inp, pos = 1)
     
   } else {
     
-    if(add_to_envir) {
+    if (add_to_envir) {
       
     # 1 - CONTROL OPTIONS
     assign(control, co, pos = 1)

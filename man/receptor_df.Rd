@@ -4,8 +4,10 @@
 \alias{receptor_df}
 \title{Receptor options data frame}
 \usage{
-receptor_df(receptor_file = as.character(NA),
-  receptor_as_text = as.character(NA))
+receptor_df(
+  receptor_file = as.character(NA),
+  receptor_as_text = as.character(NA)
+)
 }
 \arguments{
 \item{receptor_file}{Receptor file location.}

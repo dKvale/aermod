@@ -29,7 +29,8 @@ remotes::install_github(c("dKvale/installEPA",
 
 ## Examples
 
-Let's create an AERMOD receptor file: `receptors.rou`. We can set the grid to have circles of receptors at every 5 meters from 5 to 100 meters from the center point.
+Let's create an AERMOD receptor file: `receptors.rou`. We'll set the grid to have circles of receptors at every 5 meters from 5 to 100 meters from the center point.
+
 ```r
 library(aermod)
 library(receptors)
