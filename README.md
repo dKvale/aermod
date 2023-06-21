@@ -6,9 +6,9 @@ dev version: 0.0.0.9000
 # aermod
 
 
-The _aermod_ package provides a data frame interface for performing AERMOD runs from R. 
+The _aermod_ package provides a data frame interface for EPA's air dispersion modeling platform `AERMOD`. 
 
-> __Disclaimer:__ It currently only runs a single source at a time.
+> __Disclaimer:__ The Windows operating system is required to run EPA's modeling _.EXE_ file. This package is currently designed to only run one emission source at a time. Multiple sources may be run as a batch within a `for` loop.
 
 
 **AERMOD** is a steady-state plume model that incorporates air dispersion based on planetary boundary layer turbulence and scaling concepts, including treatment of both surface and elevated sources, and both simple and complex terrain.  
